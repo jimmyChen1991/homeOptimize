@@ -12,6 +12,7 @@ import com.hhyg.TyClosing.mgr.ShoppingCartMgr;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -203,16 +204,17 @@ public class DeleteAdapter extends BaseAdapter {
 		if(position == 0)
 			holder.topLayout.setVisibility(View.VISIBLE);
 		
-		final String tag = (String) holder.img.getTag();
-		final String uri = info.imgUrl;
-		if(tag != null && !uri.equals(tag)){
-			holder.img.setImageBitmap(null);
-		}else if(holder.img.getTag()!=null){
-			return convertView;
-		}
-		holder.img.setTag(uri);
-		ImageAware imageAware = new ImageViewAware(holder.img, false);
-		ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+//		final String tag = (String) holder.img.getTag();
+//		final String uri = info.imgUrl;
+//		if(tag != null && !uri.equals(tag)){
+//			holder.img.setImageBitmap(null);
+//		}else if(holder.img.getTag()!=null){
+//			return convertView;
+//		}
+//		holder.img.setTag(uri);
+//		ImageAware imageAware = new ImageViewAware(holder.img, false);
+//		ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+		Picasso.with(convertView.getContext()).load(info.imgUrl).into(holder.img);
 		return convertView;
 	}
 

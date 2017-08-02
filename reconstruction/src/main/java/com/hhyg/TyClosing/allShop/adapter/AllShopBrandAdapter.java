@@ -6,6 +6,7 @@ import com.hhyg.TyClosing.global.ImageHelper;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.view.View;
@@ -27,8 +28,9 @@ public class AllShopBrandAdapter extends AllShopBaseAdapter<BrandImgInfo,AllShop
 	}
 	@Override
 	protected void bindDataToItemView(ViewHolder viewHolder, BrandImgInfo item) {
-		ImageAware imageAware = new ImageViewAware(viewHolder.ImageItem, false);
-		ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+//		ImageAware imageAware = new ImageViewAware(viewHolder.ImageItem, false);
+//		ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+		Picasso.with(viewHolder.ImageItem.getContext()).load(item.netUri).into(viewHolder.ImageItem);
 	}
 	@Override
 	protected View getConvertView() {

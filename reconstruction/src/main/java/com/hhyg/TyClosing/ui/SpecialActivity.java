@@ -29,6 +29,7 @@ import com.hhyg.TyClosing.ui.view.SimpleProgressBar;
 import com.hhyg.TyClosing.ui.view.TabPageIndicator;
 import com.hhyg.TyClosing.ui.view.TabPageIndicator.OnTabReselectedListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -224,7 +225,8 @@ public class SpecialActivity extends Activity{
 	}
 	private void showHead(){
 		SubjectView.setText(subject);
-		ImageLoader.getInstance().displayImage(HeadImgUri, HeadImgView,ImageHelper.initSpecialPathOption());
+//		ImageLoader.getInstance().displayImage(HeadImgUri, HeadImgView,ImageHelper.initSpecialPathOption());
+		Picasso.with(SpecialActivity.this).load(HeadImgUri).into(HeadImgView);
 	}
 	class SpecialProc implements ProcMsgHelper{
 		@Override

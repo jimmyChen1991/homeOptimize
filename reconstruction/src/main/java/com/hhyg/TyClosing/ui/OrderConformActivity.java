@@ -31,6 +31,7 @@ import com.hhyg.TyClosing.util.StringUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
@@ -1469,8 +1470,9 @@ public class OrderConformActivity extends Activity {
                 TextView btnCover = (TextView) findViewById(allCover[i]);
                 if (imgView == null || btnCover == null)
                     continue;
-                ImageAware imageAware = new ImageViewAware(imgView, false);
-        		ImageLoader.getInstance().displayImage(info.getString("goods_img"), imageAware, ImageHelper.initBarcodePathOption());
+//                ImageAware imageAware = new ImageViewAware(imgView, false);
+//        		ImageLoader.getInstance().displayImage(info.getString("goods_img"), imageAware, ImageHelper.initBarcodePathOption());
+                Picasso.with(OrderConformActivity.this).load(info.getString("goods_img")).into(imgView);
                 String strT = info.getString("tax_display_txt");
                 btnCover.setVisibility(StringUtil.isEmpty(strT) == false ? View.VISIBLE : View.INVISIBLE);
                 imgView.setVisibility(View.VISIBLE);

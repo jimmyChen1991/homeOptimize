@@ -62,7 +62,7 @@ public class GoodListFragment extends Fragment implements View.OnClickListener{
 		mSearchGoodMgr = mGoodListActivity.getSerchGoodMgr();
 		mAdapter = new SearchGoodAdapter(getActivity());
 		mGridView.setAdapter(mAdapter);
-		mGridView.setOnScrollListener(new ScrollStateListener(ImageLoader.getInstance(),true,true));
+//		mGridView.setOnScrollListener(new ScrollStateListener(ImageLoader.getInstance(),true,true));
 		curretPage = 1;
 		mAdapter.setOnItemClickListener(new GoodItemClickListener(getActivity()));
 	}

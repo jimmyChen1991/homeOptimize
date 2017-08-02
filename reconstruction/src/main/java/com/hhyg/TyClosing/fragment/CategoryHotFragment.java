@@ -13,6 +13,7 @@ import com.hhyg.TyClosing.ui.SearchGoodActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -90,8 +91,9 @@ public class CategoryHotFragment extends Fragment{
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, CateInfo item) {
 			viewHolder.hotCateName.setText(item.name);
-			ImageAware imageAware = new ImageViewAware(viewHolder.hotCateImgItem, false);
-			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initCatPathOption());
+//			ImageAware imageAware = new ImageViewAware(viewHolder.hotCateImgItem, false);
+//			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initCatPathOption());
+			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.hotCateImgItem);
 		}
 		
 	}

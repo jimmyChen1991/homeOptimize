@@ -15,6 +15,7 @@ import com.hhyg.TyClosing.ui.view.InSideListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.annotation.SuppressLint;
 import android.app.Fragment;
@@ -45,8 +46,9 @@ public class CategoryContentFragment extends Fragment{
 	public void showCateInfo(CateInfo fristInfo){
 		firstLevelCateInfo = fristInfo;
 		mCategoryListAdapter.notifyDataSetChanged();
-		ImageAware imageAware = new ImageViewAware(mHeadView, false);
-		ImageLoader.getInstance().displayImage(firstLevelCateInfo.netUri, imageAware);
+//		ImageAware imageAware = new ImageViewAware(mHeadView, false);
+//		ImageLoader.getInstance().displayImage(firstLevelCateInfo.netUri, imageAware);
+		Picasso.with(getActivity()).load(fristInfo.netUri).into(mHeadView);
 	}
 	private void findView(View root) {
 		mListView = (InSideListView) root.findViewById(R.id.catelv);
@@ -149,16 +151,17 @@ public class CategoryContentFragment extends Fragment{
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, CateInfo item) {
 			viewHolder.cateItemName.setText(item.name);
-			final String tag = (String) viewHolder.cateItemImg.getTag();
-			final String uri = item.netUri;
-			if(!uri.equals(tag)){
-				viewHolder.cateItemImg.setImageBitmap(null);
-			}else if(viewHolder.cateItemImg.getTag()!=null){
-				return;
-			}
-			viewHolder.cateItemImg.setTag(uri);
-			ImageAware imageAware = new ImageViewAware(viewHolder.cateItemImg, false);
-			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+//			final String tag = (String) viewHolder.cateItemImg.getTag();
+//			final String uri = item.netUri;
+//			if(!uri.equals(tag)){
+//				viewHolder.cateItemImg.setImageBitmap(null);
+//			}else if(viewHolder.cateItemImg.getTag()!=null){
+//				return;
+//			}
+//			viewHolder.cateItemImg.setTag(uri);
+//			ImageAware imageAware = new ImageViewAware(viewHolder.cateItemImg, false);
+//			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.cateItemImg);
 		}
 	}
 

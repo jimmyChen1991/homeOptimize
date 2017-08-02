@@ -19,6 +19,7 @@ import com.hhyg.TyClosing.info.ActiveInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -72,16 +73,17 @@ public class GoodRecAdapter extends BaseQuickAdapter<SearchGoods.DataBean.GoodsL
         if(searchType == SearchType.ACTIVITY || searchType == SearchType.PRIVILEGE){
             addToshop.setVisibility(View.VISIBLE);
         }
-        final String tag = (String) helper.getView(R.id.goodimg).getTag();
-        final String uri = item.getImage();
-        if(tag != null && !uri.equals(tag)){
-            ImageView s = (ImageView)helper.getView(R.id.goodimg);
-            s.setImageBitmap(null);
-        }else if(tag != null){
-            return;
-        }
-        helper.getView(R.id.goodimg).setTag(uri);
-        ImageAware imageAware = new ImageViewAware((ImageView) helper.getView(R.id.goodimg), false);
-        ImageLoader.getInstance().displayImage(item.getImage(), imageAware, ImageHelper.initBarcodePathOption());
+//        final String tag = (String) helper.getView(R.id.goodimg).getTag();
+//        final String uri = item.getImage();
+//        if(tag != null && !uri.equals(tag)){
+//            ImageView s = (ImageView)helper.getView(R.id.goodimg);
+//            s.setImageBitmap(null);
+//        }else if(tag != null){
+//            return;
+//        }
+//        helper.getView(R.id.goodimg).setTag(uri);
+//        ImageAware imageAware = new ImageViewAware((ImageView) helper.getView(R.id.goodimg), false);
+//        ImageLoader.getInstance().displayImage(item.getImage(), imageAware, ImageHelper.initBarcodePathOption());
+        Picasso.with(helper.getView(R.id.goodimg).getContext()).load(item.getImage()).into((ImageView) helper.getView(R.id.goodimg));
     }
 }

@@ -16,6 +16,7 @@ import com.hhyg.TyClosing.ui.SearchGoodActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.app.Fragment;
 import android.content.Context;
@@ -101,16 +102,17 @@ public class BrandImgFragment extends Fragment{
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, BrandImgInfo item) {
 			viewHolder.BrandName.setText(item.name);
-			final String tag = (String) viewHolder.brandImgItem.getTag();
-			final String uri = item.netUri;
-			if(!uri.equals(tag)){
-				viewHolder.brandImgItem.setImageBitmap(null);
-			}else if(viewHolder.brandImgItem.getTag()!=null){
-				return;
-			}
-			viewHolder.brandImgItem.setTag(uri);
-			ImageAware imageAware = new ImageViewAware(viewHolder.brandImgItem, false);
-			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+//			final String tag = (String) viewHolder.brandImgItem.getTag();
+//			final String uri = item.netUri;
+//			if(!uri.equals(tag)){
+//				viewHolder.brandImgItem.setImageBitmap(null);
+//			}else if(viewHolder.brandImgItem.getTag()!=null){
+//				return;
+//			}
+//			viewHolder.brandImgItem.setTag(uri);
+//			ImageAware imageAware = new ImageViewAware(viewHolder.brandImgItem, false);
+//			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.brandImgItem);
 		}
 	}
 	class BrandOnlyImgGridViewAdapter extends AllShopBaseAdapter<BrandImgInfo, BrandOnlyImgGridViewAdapter.ViewHolder> {
@@ -133,8 +135,9 @@ public class BrandImgFragment extends Fragment{
 		}
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, BrandImgInfo item) {
-			ImageAware imageAware = new ImageViewAware(viewHolder.brandImgItem, false);
-			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+//			ImageAware imageAware = new ImageViewAware(viewHolder.brandImgItem, false);
+//			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initBrandPathOption());
+			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.brandImgItem);
 		}
 	}
 }

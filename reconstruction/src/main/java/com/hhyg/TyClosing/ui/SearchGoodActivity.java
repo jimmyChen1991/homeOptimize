@@ -74,7 +74,6 @@ import com.hhyg.TyClosing.ui.adapter.search.PeopertyPopAdapter;
 import com.hhyg.TyClosing.ui.adapter.search.VerticalFilterAdapter;
 import com.hhyg.TyClosing.ui.adapter.search.VerticalFilterItemAdapter;
 import com.hhyg.TyClosing.ui.view.PeopertyPopwindow;
-import com.hhyg.TyClosing.util.PauseOnRecScrollListener;
 import com.kyleduo.switchbutton.SwitchButton;
 
 import java.util.ArrayList;
@@ -562,7 +561,6 @@ public class SearchGoodActivity extends AppCompatActivity {
         searchtitle.setText(getIntent().getStringExtra(getString(R.string.search_content)));
         goodsWrap.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
         goodsWrap.setHasFixedSize(true);
-        goodsWrap.addOnScrollListener(new PauseOnRecScrollListener(true, true));
         attrGroupWrap.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         attrGroupWrap.setHasFixedSize(true);
         goodsWrap.setAdapter(goodRecAdapter);

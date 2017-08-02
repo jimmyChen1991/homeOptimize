@@ -12,6 +12,7 @@ import com.hhyg.TyClosing.util.StringUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -112,15 +113,15 @@ public class AutoSettleOrderAdapter extends BaseAdapter {
             viewHoldr.priceOrign.setText(goodSku.getPrice());
         }
         
-        if(goodSku.goods_img != null && !goodSku.goods_img.equals( viewHoldr.productImg.getTag())){
-        	 viewHoldr.productImg.setImageBitmap(null);
-		}else if(viewHoldr.productImg.getTag()!=null){
-			return view;
-		}
-        viewHoldr.productImg.setTag(goodSku.goods_img);
-		ImageAware imageAware = new ImageViewAware(viewHoldr.productImg, false);
-		ImageLoader.getInstance().displayImage(goodSku.goods_img, imageAware, ImageHelper.initBarcodePathOption());
-
+//        if(goodSku.goods_img != null && !goodSku.goods_img.equals( viewHoldr.productImg.getTag())){
+//        	 viewHoldr.productImg.setImageBitmap(null);
+//		}else if(viewHoldr.productImg.getTag()!=null){
+//			return view;
+//		}
+//        viewHoldr.productImg.setTag(goodSku.goods_img);
+//		ImageAware imageAware = new ImageViewAware(viewHoldr.productImg, false);
+//		ImageLoader.getInstance().displayImage(goodSku.goods_img, imageAware, ImageHelper.initBarcodePathOption());
+        Picasso.with(viewHoldr.brandName.getContext()).load(goodSku.goods_img).into(viewHoldr.productImg);
         return view;
     }
 }

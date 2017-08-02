@@ -61,6 +61,7 @@ import com.hhyg.TyClosing.ui.view.ProgressBar;
 import com.hhyg.TyClosing.ui.view.SimpleProgressBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -422,7 +423,8 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 		}
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, SpecialInfo item) {
-			ImageLoader.getInstance().displayImage(item.netUri, viewHolder.ImageItem, ImageHelper.initSpecialPathOption());
+//			ImageLoader.getInstance().displayImage(item.netUri, viewHolder.ImageItem, ImageHelper.initSpecialPathOption());
+			Picasso.with(SearchActivity.this).load(item.netUri).into(viewHolder.ImageItem);
 		}
 	}
 	@Override

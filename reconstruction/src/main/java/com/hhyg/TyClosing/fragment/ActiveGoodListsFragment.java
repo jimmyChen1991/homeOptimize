@@ -87,7 +87,7 @@ public class ActiveGoodListsFragment extends Fragment implements View.OnClickLis
 		priceStatus = -1;
 		mAdapter = new ActiveGoodAdapter(getActivity());
 		mGridView.setAdapter(mAdapter);
-		mGridView.setOnScrollListener(new ScrollStateListener(ImageLoader.getInstance(),true,true));
+//		mGridView.setOnScrollListener(new ScrollStateListener(ImageLoader.getInstance(),true,true));
 		curretPage = 1;
 		mAdapter.setOnItemClickListener(new GoodItemClickListener(getActivity()));
 	}

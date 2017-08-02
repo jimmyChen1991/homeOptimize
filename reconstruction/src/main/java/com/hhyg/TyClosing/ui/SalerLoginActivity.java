@@ -157,10 +157,10 @@ public class SalerLoginActivity extends BaseActivity{
 		mSalerNameInputEdit = (AutoClearEditText) findViewById(R.id.salername_input);
 		mSalerPwdInputEdit = (AutoClearEditText) findViewById(R.id.salerpwd_input);
 		mCommitBtn = (Button) findViewById(R.id.commmitbtn);
-		if (IS_DEBUG_MODE == true){
+		if (true){
 			//mSalerNameInputEdit.setText("rygcxs");//日月广场店
-			mSalerNameInputEdit.setText("hktest");//线上
-			mSalerPwdInputEdit.setText("123456");
+			mSalerNameInputEdit.setText("chenqiyang");//线上
+			mSalerPwdInputEdit.setText("1qaz2wsx");
 			//mSalerNameInputEdit.setText("三亚管理");//三亚店
 			//mSalerPwdInputEdit.setText("123456");
 		}

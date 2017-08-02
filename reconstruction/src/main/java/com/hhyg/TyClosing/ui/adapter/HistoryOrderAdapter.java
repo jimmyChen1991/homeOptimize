@@ -10,6 +10,7 @@ import com.hhyg.TyClosing.ui.HistoryOrderActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -99,8 +100,9 @@ public class HistoryOrderAdapter extends BaseAdapter {
             final ShoppingCartInfo Sinfo = list.get(idx);
             ImageView img = new ImageView(mContext);
             img.setLayoutParams(ll);
-            ImageAware imageAware = new ImageViewAware(img, false);
-    		ImageLoader.getInstance().displayImage(Sinfo.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
+//            ImageAware imageAware = new ImageViewAware(img, false);
+//    		ImageLoader.getInstance().displayImage(Sinfo.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
+            Picasso.with(mContext).load(Sinfo.imgUrl).into(img);
             group.addView(img);
         }
         if (list.size() > 5) {

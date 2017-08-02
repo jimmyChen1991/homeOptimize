@@ -26,6 +26,7 @@ import com.hhyg.TyClosing.ui.callback.ICheckPayResultCallBack;
 import com.hhyg.TyClosing.util.StringUtil;
 import com.hhyg.TyClosing.util.ToastUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,7 +103,8 @@ public class PayWeiXinActivity extends Activity implements ICheckPayResultCallBa
                             Toast.makeText(getApplicationContext(), "支付图片地址获取失败", Toast.LENGTH_SHORT).show();
                         } else {
                             final ImageView image = (ImageView) findViewById(R.id.buttoncode);
-                            ImageLoader.getInstance().displayImage(str, image);
+//                            ImageLoader.getInstance().displayImage(str, image);
+                            Picasso.with(PayWeiXinActivity.this).load(str).into(image);
                         }
                     }
                 });

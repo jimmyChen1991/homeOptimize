@@ -16,6 +16,7 @@ import com.hhyg.TyClosing.ui.SpecialActivity;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -62,8 +63,10 @@ public class AllShopSpecialFragment extends AllShopBaseFragment implements View.
 		showAd();
 	}
 	private void showAd() {
-		ImageLoader.getInstance().displayImage(mAdList.get(0).netUri, AdOne, ImageHelper.initSpecialPathOption());
-		ImageLoader.getInstance().displayImage(mAdList.get(1).netUri, AdTwo, ImageHelper.initSpecialPathOption());
+//		ImageLoader.getInstance().displayImage(mAdList.get(0).netUri, AdOne, ImageHelper.initSpecialPathOption());
+//		ImageLoader.getInstance().displayImage(mAdList.get(1).netUri, AdTwo, ImageHelper.initSpecialPathOption());
+		Picasso.with(getActivity()).load(mAdList.get(0).netUri).into(AdOne);
+		Picasso.with(getActivity()).load(mAdList.get(1).netUri).into(AdTwo);
 	}
 	private void AdSetTag() {
 		AdOne.setTag(mAdList.get(0).id);
@@ -106,8 +109,9 @@ public class AllShopSpecialFragment extends AllShopBaseFragment implements View.
 		@Override
 		public void displayImage(Context context, Object path, ImageView imageView) {
 			SpecialInfo specialInfo = (SpecialInfo) path;
-			ImageAware imageAware = new ImageViewAware(imageView, false);
-			ImageLoader.getInstance().displayImage(specialInfo.netUri, imageAware, ImageHelper.initSpecialPathOption());
+//			ImageAware imageAware = new ImageViewAware(imageView, false);
+//			ImageLoader.getInstance().displayImage(specialInfo.netUri, imageAware, ImageHelper.initSpecialPathOption());
+			Picasso.with(getActivity()).load(specialInfo.netUri).into(imageView);
 		}
 	}
 }

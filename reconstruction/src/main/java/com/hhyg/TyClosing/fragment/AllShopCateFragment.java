@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,7 +34,7 @@ public class AllShopCateFragment extends AllShopBaseFragment implements View.OnC
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view =inflater.inflate(R.layout.allshop_cate_frag, container);
-		mImageViewList = new ArrayList<ImageView>();
+		mImageViewList = new ArrayList<>();
 		findView(view);
 		return view;
 	}
@@ -53,26 +54,27 @@ public class AllShopCateFragment extends AllShopBaseFragment implements View.OnC
 	}
 	@Override
 	public void setLastestContent() {
-		options = new DisplayImageOptions.Builder()   
-		        .resetViewBeforeLoading(false)  // default  
-		        .delayBeforeLoading(1000) 
-		        .diskCachePath(new BrandFileGetter())
-		        .cacheInMemory(true) // default  
-		        .cacheOnDisk(true) // default  
-		        .considerExifParams(false) // default  
-		        .imageScaleType(ImageScaleType.IN_SAMPLE_INT) // default  
-		        .bitmapConfig(Bitmap.Config.RGB_565) 
-		        .displayer(new SimpleBitmapDisplayer()) // default  
-		        .handler(new Handler())
-		        .displayer(new RoundedBitmapDisplayer(20))// default  
-		        .build();
+//		options = new DisplayImageOptions.Builder()
+//		        .resetViewBeforeLoading(false)  // default
+//		        .delayBeforeLoading(1000)
+//		        .diskCachePath(new BrandFileGetter())
+//		        .cacheInMemory(true) // default
+//		        .cacheOnDisk(true) // default
+//		        .considerExifParams(false) // default
+//		        .imageScaleType(ImageScaleType.IN_SAMPLE_INT) // default
+//		        .bitmapConfig(Bitmap.Config.RGB_565)
+//		        .displayer(new SimpleBitmapDisplayer()) // default
+//		        .handler(new Handler())
+//		        .displayer(new RoundedBitmapDisplayer(20))// default
+//		        .build();
 		mCateInfoList = mAllShopInfoMgr.getAllShopInfo().catInfoList;
 		for(int idx = 0;idx<mCateInfoList.size();idx++){
 			ImageView view = mImageViewList.get(idx);
 			view.setTag(mCateInfoList.get(idx));
 			view.setOnClickListener(this);
-			ImageAware imageAware = new ImageViewAware(view, false);
-			ImageLoader.getInstance().displayImage(mCateInfoList.get(idx).netUri, imageAware, options);
+			Picasso.with(getActivity()).load(mCateInfoList.get(idx).netUri).into(view);
+//			ImageAware imageAware = new ImageViewAware(view, false);
+//			ImageLoader.getInstance().displayImage(mCateInfoList.get(idx).netUri, imageAware, options);
 		}
 	}
 	@Override

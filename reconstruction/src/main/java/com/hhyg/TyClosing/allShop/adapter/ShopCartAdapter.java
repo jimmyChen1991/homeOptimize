@@ -17,6 +17,7 @@ import com.hhyg.TyClosing.ui.view.InSideListView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -340,16 +341,17 @@ public class ShopCartAdapter extends BaseAdapter{
 				}else{
 					viewHolder.aty_wrap.setVisibility(View.GONE);
 				}
-				final String tag = (String) viewHolder.image.getTag();
-				final String uri = item.getImgUrl();
-				if(!uri.equals(tag)){
-					viewHolder.image.setImageBitmap(null);
-				}else if(viewHolder.image.getTag()!=null){
-					return convertView;
-				}
-				viewHolder.image.setTag(uri);
-				ImageAware imageAware = new ImageViewAware(viewHolder.image, false);
-				ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+//				final String tag = (String) viewHolder.image.getTag();
+//				final String uri = item.getImgUrl();
+//				if(!uri.equals(tag)){
+//					viewHolder.image.setImageBitmap(null);
+//				}else if(viewHolder.image.getTag()!=null){
+//					return convertView;
+//				}
+//				viewHolder.image.setTag(uri);
+//				ImageAware imageAware = new ImageViewAware(viewHolder.image, false);
+//				ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+				Picasso.with(viewHolder.image.getContext()).load(item.getImgUrl()).into(viewHolder.image);
 			}
 			return convertView;
 		}

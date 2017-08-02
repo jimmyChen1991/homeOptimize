@@ -40,6 +40,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.readystatesoftware.viewbadger.BadgeView;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -1220,8 +1221,9 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 		@Override
 		public Object instantiateItem(View container, int position) {
 			ImageView imageView = new ImageView(GoodsInfoActivity.this);
-			ImageAware imageAware = new ImageViewAware(imageView, false);
-			ImageLoader.getInstance().displayImage(imgs.get(position), imageAware, ImageHelper.initBarcodePathOption());
+//			ImageAware imageAware = new ImageViewAware(imageView, false);
+//			ImageLoader.getInstance().displayImage(imgs.get(position), imageAware, ImageHelper.initBarcodePathOption());
+			Picasso.with(GoodsInfoActivity.this).load(imgs.get(position)).resize(400,400).centerCrop().into(imageView);
 			((ViewPager) container).addView(imageView, 0);
 			return imageView;
 		}

@@ -118,16 +118,16 @@ public class SpecialContentFragment extends Fragment{
 				viewHolder.citPrice.setText(Constants.MIANSHUI_TITLE+item.citPrice);
 				viewHolder.activiteIndictor.setVisibility(View.INVISIBLE);
 			}
-			final String tag = (String) viewHolder.imgItem.getTag();
-			final String uri = item.netUri;
-			if(!uri.equals(tag)){
-				viewHolder.imgItem.setImageBitmap(null);
-			}else if(viewHolder.imgItem.getTag()!=null){
-				return;
-			}
-			viewHolder.imgItem.setTag(uri);
-			ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
-			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+//			final String tag = (String) viewHolder.imgItem.getTag();
+//			final String uri = item.netUri;
+//			if(!uri.equals(tag)){
+//				viewHolder.imgItem.setImageBitmap(null);
+//			}else if(viewHolder.imgItem.getTag()!=null){
+//				return;
+//			}
+//			viewHolder.imgItem.setTag(uri);
+//			ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
+//			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
 		}
 	}
 }

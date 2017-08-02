@@ -62,7 +62,7 @@ public class MyApplication extends Application implements HttpUtil {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
-        ImageHelper.LoaderInit(this);
+//        ImageHelper.LoaderInit(this);
         Realm.init(this);
         RealmConfiguration configuration = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(configuration);

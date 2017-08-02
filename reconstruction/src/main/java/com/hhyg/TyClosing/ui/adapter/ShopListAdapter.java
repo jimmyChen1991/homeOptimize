@@ -12,6 +12,7 @@ import com.hhyg.TyClosing.util.StringUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
@@ -124,14 +125,15 @@ public class ShopListAdapter extends BaseAdapter {
             viewHolder.priceOrign.setText(info.price);
         }
         
-    	if(!info.imgUrl.equals(viewHolder.shopImgView.getTag())){
-    		viewHolder.shopImgView.setImageBitmap(null);
-		}else if(viewHolder.shopImgView.getTag()!=null){
-			return convertView;
-		}
-    	viewHolder.shopImgView.setTag(info.imgUrl);
-		ImageAware imageAware = new ImageViewAware(viewHolder.shopImgView, false);
-		ImageLoader.getInstance().displayImage(info.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
+//    	if(!info.imgUrl.equals(viewHolder.shopImgView.getTag())){
+//    		viewHolder.shopImgView.setImageBitmap(null);
+//		}else if(viewHolder.shopImgView.getTag()!=null){
+//			return convertView;
+//		}
+//    	viewHolder.shopImgView.setTag(info.imgUrl);
+//		ImageAware imageAware = new ImageViewAware(viewHolder.shopImgView, false);
+//		ImageLoader.getInstance().displayImage(info.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
+        Picasso.with(convertView.getContext()).load(info.imgUrl).into(viewHolder.shopImgView);
         return convertView;
     }
 }

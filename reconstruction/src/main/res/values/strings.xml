@@ -69,7 +69,7 @@
 
     <string name="ticket_no_use">不满足使用条件</string>
     <string name="select_pay_type_order_number">订单提交成功,请尽快付款!订单号:</string>
-    
+
     <string name="server_exception">服务器数据异常</string>
     <string name="netconnect_exception">网络异常</string>
     <string name="serverresult_exception">响应数据为空</string>

@@ -48,7 +48,6 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 
 public class AllShopActivity extends Activity implements OnClickListener,IsPrivilegeUserView{
 	private ArrayList<AllShopBaseFragment> mFragList;
@@ -82,6 +81,7 @@ public class AllShopActivity extends Activity implements OnClickListener,IsPrivi
 		findView();
 		mIsprivilegeUserPresenter = new IsprivilegeUserPresenter();
 		mIsprivilegeUserPresenter.attach(this);
+		fetchLastedAllshopDataOnRefresh();
 		Logger.GetInstance().Debug("AllShopActivity onCreate");
 	}
 
@@ -96,9 +96,6 @@ public class AllShopActivity extends Activity implements OnClickListener,IsPrivi
 		if(ClosingRefInfoMgr.getInstance().getLoginConfig().isPrivilege_active()){
 			mIsprivilegeUserPresenter.isPrivilegeUser();
 		}
-		InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0); //强制隐藏键盘
-		fetchLastedAllshopDataOnRefresh();
 		Logger.GetInstance().Track("AllShopActivity on onResume");
 	}
 	@Override

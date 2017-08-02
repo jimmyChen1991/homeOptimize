@@ -135,16 +135,16 @@ public class SearchGoodAdapter extends BaseAdapter{
 				}
 			}
 		});
-		final String tag = (String) viewHolder.imgItem.getTag();
-		final String uri = item.netUri;
-		if(!uri.equals(tag)){
-			viewHolder.imgItem.setImageBitmap(null);
-		}else if(viewHolder.imgItem.getTag()!=null){
-			return convertView;
-		}
-		viewHolder.imgItem.setTag(uri);
-		ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
-		ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
+//		final String tag = (String) viewHolder.imgItem.getTag();
+//		final String uri = item.netUri;
+//		if(!uri.equals(tag)){
+//			viewHolder.imgItem.setImageBitmap(null);
+//		}else if(viewHolder.imgItem.getTag()!=null){
+//			return convertView;
+//		}
+//		viewHolder.imgItem.setTag(uri);
+//		ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
+//		ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
 		return convertView;
 	}
 }

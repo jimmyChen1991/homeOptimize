@@ -13,6 +13,7 @@ import com.hhyg.TyClosing.ui.view.InSideGridView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
+import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.content.Intent;
@@ -80,8 +81,9 @@ public class AllShopGiftFragment extends AllShopBaseFragment{
 		}
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, SpecialInfo item) {
-			ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
-			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initSpecialPathOption());
+//			ImageAware imageAware = new ImageViewAware(viewHolder.imgItem, false);
+//			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initSpecialPathOption());
+			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.imgItem);
 		}
 	}
 }

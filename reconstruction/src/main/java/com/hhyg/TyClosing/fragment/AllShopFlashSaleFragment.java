@@ -16,6 +16,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+import com.squareup.picasso.Picasso;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -94,12 +95,13 @@ public class AllShopFlashSaleFragment extends AllShopBaseFragment{
 			view.setName(info.name);
 			view.setLayoutParams(itemParams);
 			uri = info.netUri;
-			ImageAware imageAware = new ImageViewAware(view.getImagewView(), false);
-			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption(),new SimpleImageLoadingListener(){
-				@Override
-				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {					
-					}
-				});
+			Picasso.with(getActivity()).load(uri).into(view.getImagewView());
+//			ImageAware imageAware = new ImageViewAware(view.getImagewView(), false);
+//			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption(),new SimpleImageLoadingListener(){
+//				@Override
+//				public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//					}
+//				});
 			view.setTag(info.barCode);
 			view.setOnClickListener(mGoodInfoPresenter);
 			mImgGroup.addView(view);
