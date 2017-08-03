@@ -23,9 +23,7 @@ import com.hhyg.TyClosing.config.Constants;
 import com.hhyg.TyClosing.dao.InitInfoDao;
 import com.hhyg.TyClosing.dao.PickUpInfoDao;
 import com.hhyg.TyClosing.dao.SalerInfoDao;
-import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
 import com.hhyg.TyClosing.di.componet.DaggerLoginConfigComponent;
-import com.hhyg.TyClosing.di.module.CommonNetParamModule;
 import com.hhyg.TyClosing.entities.loginconfig.LoginConfig;
 import com.hhyg.TyClosing.entities.loginconfig.LoginConfigParam;
 import com.hhyg.TyClosing.entities.loginconfig.LoginConfigRes;
@@ -50,7 +48,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
-
 
 import es.dmoral.toasty.Toasty;
 import io.reactivex.Observable;
@@ -302,7 +299,7 @@ public class SalerLoginActivity extends BaseActivity{
 	}
 
 	private void jumpToAllShopActivity() {
-		openActivityWithEnding(AllShopActivity.class);
+		openActivityWithEnding(HomeActivity.class);
 	}
 	
 	static class LoginRuleCheck{

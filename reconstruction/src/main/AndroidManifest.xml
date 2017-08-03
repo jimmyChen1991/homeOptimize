@@ -174,7 +174,9 @@
                 android:theme="@style/new_atytheme"
                 android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".ui.HomeActivity">
+        <activity android:name=".ui.HomeActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/new_atytheme">
 
         </activity>
     </application>
