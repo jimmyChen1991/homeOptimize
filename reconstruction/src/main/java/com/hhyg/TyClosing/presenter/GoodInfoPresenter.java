@@ -58,6 +58,7 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoView>{
 		param.put("imei", MyApplication.GetInstance().getAndroidId());
 		param.put("shopid", ClosingRefInfoMgr.getInstance().getShopId());
 		param.put("channel", ClosingRefInfoMgr.getInstance().getChannelId());
+		param.put("deliverPlace",ClosingRefInfoMgr.getInstance().getCurPickupId());
 		param.put("data", data);
 		return param.toString();
 	}

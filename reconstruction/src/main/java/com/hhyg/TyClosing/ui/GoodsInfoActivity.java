@@ -1059,6 +1059,7 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 			return;
 		}
 		mGoodName.setText(spuInfo.name);
+		checkAddShopState();
 		if (mShoppingCartMgr.isInfoExist(spuInfo.barCode)) {
 			mCurSelectedPropertyButton.setBackgroundResource(R.drawable.has_inshopcart_selector);
 			mCurSelectedPropertyButton.setTextColor(Color.rgb(195, 140, 86));
