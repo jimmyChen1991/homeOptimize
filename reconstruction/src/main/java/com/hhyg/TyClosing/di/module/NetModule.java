@@ -64,7 +64,7 @@ public class NetModule {
     @Provides
     @Named("indexUrl")
     String provideIndexApiUrlStr(){
-        return "http://wangwangcommonapi.test89.mianshui365.net/";
+        return "http://v4commonapi.mianshui365.net/";
     }
 
     @Provides

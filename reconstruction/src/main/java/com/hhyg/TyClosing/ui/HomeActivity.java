@@ -143,7 +143,6 @@ public class HomeActivity extends AppCompatActivity {
             bannerGroup.addView(xianshiView);
         }
 
-
         HeaderAndFooterWrapper wrapper = new HeaderAndFooterWrapper(new RecyclerView.Adapter() {
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
