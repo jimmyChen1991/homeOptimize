@@ -5,6 +5,12 @@
     <string name="salerpwd_login">请输入密码</string>
     <string name="login_success">登录成功</string>
 
+    <string name="home">首页</string>
+    <string name="category">分类</string>
+    <string name="brand">品牌</string>
+    <string name="shopcart">购物车</string>
+    <string name="into_brand">进入品牌</string>
+
     <string name="bindcustomercode">关联客户码</string>
     <string name="menu_settings">Settings</string>
     <string name="soft_update_no">不更新</string>
@@ -93,8 +99,6 @@
     <string name="search_desc">desc</string>
 
     <string name="searchbartext">搜索商品</string>
-    <string name="category">分类</string>
-    <string name="brand">品牌</string>
     <string name="price">价格</string>
     <string name="filter">筛选</string>
     <string name="all">全部</string>

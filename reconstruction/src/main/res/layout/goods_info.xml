@@ -65,7 +65,18 @@
             android:id="@+id/relativeLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
-
+            <TextView
+                android:id="@+id/into_brand_activity"
+                android:layout_width="60dp"
+                android:layout_height="23dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_20"
+                android:gravity="center"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/normal"
+                android:background="@drawable/shape_goodsinfo_brand"
+                android:text="@string/into_brand"/>
             <TextView
                 android:id="@+id/brandTitle"
                 android:layout_width="wrap_content"
@@ -74,7 +85,7 @@
                 android:layout_marginTop="26dip"
                 android:textColor="#333333"
                 android:textSize="30sp" />
-
+                
             <TextView
                 android:id="@+id/goodName"
                 android:layout_width="wrap_content"

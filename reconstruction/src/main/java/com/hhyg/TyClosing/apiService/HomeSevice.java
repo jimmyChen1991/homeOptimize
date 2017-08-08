@@ -13,7 +13,7 @@ import retrofit2.http.POST;
 
 public interface HomeSevice {
 
-    @POST("index.php?r=tyhomeapi/home")
+    @POST("index.php?r=home/home")
     @FormUrlEncoded
     Observable<ContentRes> getHomeContent(@Field("parameter") String param);
 

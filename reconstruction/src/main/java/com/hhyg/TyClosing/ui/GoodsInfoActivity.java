@@ -347,15 +347,7 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 		mBrandNameTextView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SearchInfo info = SearchInfo.NewInstance(SearchInfo.BRAND_SEARCH, mInfo.brandId, mInfo.brand);
-				SearchGoodsParam.DataBean bean = new SearchGoodsParam.DataBean();
-				bean.setBrandId(info.brandId);
-				Intent intent = new Intent();
-				intent.setClass(GoodsInfoActivity.this, SearchGoodActivity.class);
-				intent.putExtra(getString(R.string.search_content),info.searchContent);
-				intent.putExtra(getString(R.string.search_token),bean);
-				intent.putExtra(getString(R.string.search_type), SearchType.BRAND.ordinal());
-				startActivity(intent);
+				searchBrandActivity();
 			}
 		});
 		mAddCount.setOnClickListener(new OnClickListener() {
@@ -372,6 +364,24 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 				refreshCount();
 			}
 		});
+		findViewById(R.id.into_brand_activity).setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchBrandActivity();
+			}
+		});
+	}
+
+	private void searchBrandActivity() {
+		SearchInfo info = SearchInfo.NewInstance(SearchInfo.BRAND_SEARCH, mInfo.brandId, mInfo.brand);
+		SearchGoodsParam.DataBean bean = new SearchGoodsParam.DataBean();
+		bean.setBrandId(info.brandId);
+		Intent intent = new Intent();
+		intent.setClass(GoodsInfoActivity.this, SearchGoodActivity.class);
+		intent.putExtra(getString(R.string.search_content),info.searchContent);
+		intent.putExtra(getString(R.string.search_token),bean);
+		intent.putExtra(getString(R.string.search_type), SearchType.BRAND.ordinal());
+		startActivity(intent);
 	}
 
 	public void setAirPort() {

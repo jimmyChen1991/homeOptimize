@@ -7,48 +7,85 @@
     android:layout_alignParentBottom="true"
     android:clickable="true"
     android:background="@drawable/bottomshdowbar">
-<ImageButton
-    android:id="@+id/home"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginLeft="78dip"
-    android:background="@drawable/tabbottom_home_selector"
-    android:layout_centerVertical="true"/>
-<ImageButton
-    android:id="@+id/brand"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_toRightOf="@+id/home"
-    android:orientation="vertical"
-    android:layout_marginLeft="78dip"
-    android:background="@drawable/tabbottom_brand_selector"
-    android:layout_centerVertical="true"/>
-<ImageButton
-    android:id="@+id/cate"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_toRightOf="@+id/brand"
-    android:orientation="vertical"
-    android:layout_marginLeft="78dip"
-    android:background="@drawable/tabbottom_cate_selector"
-    android:layout_centerVertical="true"/>
-<ImageButton
-    android:id="@+id/scan"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_toRightOf="@+id/cate"
-    android:layout_marginLeft="78dip"
-    android:background="@drawable/tabbottom_scan_selector"
-    android:layout_centerVertical="true"/>
-<ImageButton
-    android:id="@+id/shopcat"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_alignParentRight="true"
-    android:layout_marginRight="78dip"
-    android:background="@drawable/tabbottom_shopcat_selector"
-    android:layout_centerVertical="true"/>
+    <TextView
+        android:id="@+id/home_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal"
+        android:textSize="@dimen/sp_12"
+        android:text="@string/home"
+        android:layout_marginLeft="82dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"/>
+    <TextView
+        android:id="@+id/brand_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal"
+        android:textSize="@dimen/sp_12"
+        android:text="@string/brand"
+        android:layout_toRightOf="@id/home_text"
+        android:layout_marginLeft="170dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal"
+        android:textSize="@dimen/sp_12"
+        android:text="@string/category"
+        android:layout_toRightOf="@+id/brand_text"
+        android:layout_marginLeft="168dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/normal"
+        android:textSize="@dimen/sp_12"
+        android:text="@string/shopcart"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="75dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="7dp"/>
+    <ImageButton
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="68dip"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/home_icon" />
+    <ImageButton
+        android:id="@+id/brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/home"
+        android:layout_marginLeft="144dip"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/brand_icon" />
+    <ImageButton
+        android:id="@+id/cate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/brand"
+        android:layout_marginLeft="144dip"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/cate_icon" />
+    <ImageButton
+        android:id="@+id/scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_toRightOf="@+id/cate"
+        android:layout_marginLeft="78dip"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/tabbottom_scan_selector" />
+    <ImageButton
+        android:id="@+id/shopcat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="68dip"
+        android:layout_marginTop="@dimen/dp_5"
+        android:background="@drawable/shopcart_icon" />
 </RelativeLayout>
