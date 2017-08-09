@@ -37,7 +37,9 @@ public class GoodsBean {
          * cate_id : 100
          * activeinfo : {"short_desc":"满200减20","time_begin":1494548460000,"time_end":1530356400000,"type_name":"满额减","price":2000,"active_id":"AI2017051209253042960","is_show":true,"active_type":"3","detailPrmTag":true,"active_name":"满200元减20元 满300元减30元 满400元减40元 满500元减50.00元","active_price":1800,"isprivilege":0}
          */
-
+        private boolean setColor;
+        private String cheapPrice;
+        private String normalPrice;
         private String image;
         private String market_price;
         private int stock;
@@ -50,7 +52,31 @@ public class GoodsBean {
         private String brandname;
         private ActiveinfoBean activeinfo;
 
-        public String getImage() {
+    public void setSetColor(boolean setColor) {
+        this.setColor = setColor;
+    }
+
+    public boolean isSetColor() {
+        return setColor;
+    }
+
+    public void setCheapPrice(String cheapPrice) {
+        this.cheapPrice = cheapPrice;
+    }
+
+    public String getCheapPrice() {
+        return cheapPrice;
+    }
+
+    public void setNormalPrice(String normalPrice) {
+        this.normalPrice = normalPrice;
+    }
+
+    public String getNormalPrice() {
+        return normalPrice;
+    }
+
+    public String getImage() {
             return image;
         }
 

@@ -116,6 +116,7 @@ public class ContentRes {
 
             private String specialid;
             private String imgurl;
+            private String color;
             private List<GoodsBean> goods;
 
             public String getSpecialid() {
@@ -142,6 +143,13 @@ public class ContentRes {
                 this.goods = goods;
             }
 
+            public void setColor(String color) {
+                this.color = color;
+            }
+
+            public String getColor() {
+                return color;
+            }
 
         }
 
@@ -178,6 +186,24 @@ public class ContentRes {
                 private String imgurl;
                 private String brandname;
                 private String brandid;
+                private String brandname_en;
+                private String brandname_cn;
+
+                public void setBrandname_cn(String brandname_cn) {
+                    this.brandname_cn = brandname_cn;
+                }
+
+                public void setBrandname_en(String brandname_en) {
+                    this.brandname_en = brandname_en;
+                }
+
+                public String getBrandname_cn() {
+                    return brandname_cn;
+                }
+
+                public String getBrandname_en() {
+                    return brandname_en;
+                }
 
                 public String getImgurl() {
                     return imgurl;

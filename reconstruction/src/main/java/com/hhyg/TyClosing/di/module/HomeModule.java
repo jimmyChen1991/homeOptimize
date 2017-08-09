@@ -1,9 +1,13 @@
 package com.hhyg.TyClosing.di.module;
 
+import android.support.v7.widget.RecyclerView;
+import android.view.ViewGroup;
+
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.apiService.HomeSevice;
 import com.hhyg.TyClosing.entities.CommonParam;
 import com.hhyg.TyClosing.entities.home.ReqParam;
+import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
 
 import javax.inject.Named;
 
@@ -43,4 +47,5 @@ public class HomeModule {
         res.setShopid(param.getShopId());
         return res;
     }
+
 }

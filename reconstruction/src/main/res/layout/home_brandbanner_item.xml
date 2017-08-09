@@ -9,7 +9,7 @@
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"/>
     <TextView
-        android:id="@+id/brand"
+        android:id="@+id/english_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/img"
@@ -22,37 +22,15 @@
         android:textStyle="bold"
         android:textColor="@color/light"/>
     <TextView
-        android:id="@+id/attr_info"
+        android:id="@+id/chinese_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/brand"
-        android:layout_marginTop="@dimen/dp_3"
+        android:layout_below="@id/english_name"
+        android:layout_marginTop="@dimen/dp_10"
         android:layout_centerHorizontal="true"
         android:ellipsize="end"
         android:maxEms="16"
         android:maxLines="1"
         android:textSize="@dimen/sp_12"
         android:textColor="@color/light"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/attr_info"
-        android:layout_marginTop="@dimen/dp_10"
-        android:layout_centerHorizontal="true">
-        <TextView
-            android:id="@+id/cheap_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textSize="@dimen/sp_12"
-            android:textColor="@color/cheap_price"/>
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:textSize="@dimen/sp_12"
-            android:textColor="@color/price"/>
-    </LinearLayout>
 </RelativeLayout>
