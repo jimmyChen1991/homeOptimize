@@ -29,7 +29,7 @@ public class BrandTitlePresenter extends BasePresenter<BrandTitleView>{
 		 return ar;		
 	}
 	private void init(){
-		mImgMap = new HashMap<String,ArrayList<BrandImgInfo>>();
+		mImgMap = new HashMap<>();
 		mMsgProcer = new BrandProc();
 		//mHotBrand = new ArrayList<BrandImgInfo>();
 	}

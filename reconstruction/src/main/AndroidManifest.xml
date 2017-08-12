@@ -90,7 +90,8 @@
         <activity
                 android:name=".ui.BrandActivity"
                 android:configChanges="orientation|keyboardHidden"
-                android:screenOrientation="portrait">
+                android:screenOrientation="portrait"
+                android:theme="@style/new_atytheme">
         </activity>
         <activity
                 android:name=".ui.GoodListActivity"

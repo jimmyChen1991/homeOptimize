@@ -2,8 +2,10 @@ package com.hhyg.TyClosing.ui.adapter.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +64,26 @@ public class BannerAdapter extends RecyclerView.Adapter{
             final GoodsBean bean = mData.get(position);
             ((MainViewHolder) holder).brand.setText(bean.getBrandname());
             ((MainViewHolder) holder).attr.setText(bean.getAttr_info());
+            if(!TextUtils.isEmpty(bean.getJiaobiao())){
+                ((MainViewHolder) holder).jiaobiao.setVisibility(View.VISIBLE);
+                ((MainViewHolder) holder).jiaobiao.setText(bean.getJiaobiao());
+            }else{
+                ((MainViewHolder) holder).jiaobiao.setVisibility(View.GONE);
+            }
+            if(bean.getActiveinfo() != null && !TextUtils.isEmpty(bean.getActiveinfo().getShort_desc())){
+                ((MainViewHolder) holder).promotion.setVisibility(View.VISIBLE);
+                ((MainViewHolder) holder).promotion.setText(bean.getActiveinfo().getShort_desc());
+            }else{
+                ((MainViewHolder) holder).promotion.setVisibility(View.GONE);
+            }
             if (bean.isSetColor()){
                 ((MainViewHolder) holder).cheap_price.setText(Html.fromHtml(bean.getCheapPrice()));
             }else{
                 ((MainViewHolder) holder).cheap_price.setText(bean.getCheapPrice());
             }
             ((MainViewHolder) holder).price.setText(bean.getNormalPrice());
+            ((MainViewHolder) holder).price.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            ((MainViewHolder) holder).price.getPaint().setAntiAlias(true);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,7 +138,10 @@ public class BannerAdapter extends RecyclerView.Adapter{
         TextView cheap_price;
         @BindView(R.id.price)
         TextView price;
-
+        @BindView(R.id.jiaobiao)
+        TextView jiaobiao;
+        @BindView(R.id.promotion)
+        TextView promotion;
         public MainViewHolder(View view) {
             super(view);
             ButterKnife.bind(this,view);

@@ -11,14 +11,17 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
         android:layout_below="@id/banner"
+        android:paddingTop="@dimen/dp_5"
         android:background="@color/ffffff">
         <ImageView
+            android:id="@+id/hhyg_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/hhyglogo"
             android:layout_marginLeft="38dp"
             android:layout_gravity="center_vertical"/>
         <RelativeLayout
+            android:id="@+id/search_wrap"
             android:layout_width="638dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_15"
@@ -57,15 +60,15 @@
         android:id="@+id/cate_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_20"
         android:background="@color/ffffff"
-        android:layout_below="@id/searchbar"
-        android:layout_marginTop="@dimen/dp_10">
+        android:layout_below="@id/searchbar">
     </android.support.v7.widget.RecyclerView>
     <LinearLayout
         android:id="@+id/banner_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchbar"
+        android:layout_below="@+id/cate_rv"
         android:orientation="vertical">
     </LinearLayout>
 </RelativeLayout>

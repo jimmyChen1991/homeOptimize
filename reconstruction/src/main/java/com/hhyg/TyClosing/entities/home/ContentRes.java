@@ -328,6 +328,15 @@ public class ContentRes {
             private String title;
             private String cateid;
             private List<GoodsBean> goods;
+            private int level;
+
+            public void setLevel(int level) {
+                this.level = level;
+            }
+
+            public int getLevel() {
+                return level;
+            }
 
             public String getTitle() {
                 return title;

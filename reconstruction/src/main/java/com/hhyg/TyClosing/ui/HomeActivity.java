@@ -15,13 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.apiService.HomeSevice;
+import com.hhyg.TyClosing.config.Constants;
 import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
 import com.hhyg.TyClosing.di.componet.DaggerHomeComponent;
 import com.hhyg.TyClosing.di.module.CommonNetParamModule;
@@ -33,6 +31,7 @@ import com.hhyg.TyClosing.ui.adapter.home.BannerAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.BrandBannerAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.CateAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.GoodsAdapter;
+import com.hhyg.TyClosing.ui.view.SPScrollview;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -54,6 +53,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -72,25 +72,46 @@ public class HomeActivity extends AppCompatActivity {
     Gson gson;
     @Inject
     ReqParam param;
+    @Inject
     HeaderAndFooterWrapper wrapper;
     @BindView(R.id.home)
     ImageButton home;
     @BindView(R.id.rv)
-    RecyclerView rv;
+    SPScrollview scrollview;
     @BindView(R.id.swipe_container)
     SwipeRefreshLayout swipeContainer;
+    @BindView(R.id.searchbar_top)
+    View topSearchBar;
+    @BindView(R.id.hhyg_icon)
+    ImageButton hhygIcon;
+    @BindView(R.id.search_wrap)
+    View searchWrap;
+    @Inject
+    CompositeDisposable disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+        home.setBackgroundResource(R.drawable.home_icon_pressed);
+        topSearchBar.setVisibility(View.GONE);
+        swipeContainer.setProgressViewEndTarget(true,200);
         DaggerHomeComponent.builder()
                 .applicationComponent(MyApplication.GetInstance().getComponent())
                 .commonNetParamComponent(DaggerCommonNetParamComponent.builder().commonNetParamModule(new CommonNetParamModule()).build())
                 .build()
                 .inject(this);
-        home.setBackgroundResource(R.drawable.home_icon_pressed);
+        scrollview.setListener(new SPScrollview.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged(int dy) {
+                if (dy > 550) {
+                    topSearchBar.setVisibility(View.VISIBLE);
+                } else {
+                    topSearchBar.setVisibility(View.GONE);
+                }
+            }
+        });
         Observable.just(param)
                 .flatMap(new Function<ReqParam, ObservableSource<ContentRes>>() {
                     @Override
@@ -101,21 +122,21 @@ public class HomeActivity extends AppCompatActivity {
                 .doOnNext(new Consumer<ContentRes>() {
                     @Override
                     public void accept(@NonNull ContentRes contentRes) throws Exception {
-                        if(contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null){
-                            for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()){
+                        if (contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null) {
+                            for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()) {
                                 handlerGoodsBeanPrice(bean);
                             }
                         }
-                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean: contentRes.getData().getTy_pad_index_new_goodstopic()){
-                            if(tyPadIndexNewGoodstopicBean.getGoods() != null){
-                                for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()){
+                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
+                            if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
+                                for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
                                     handlerGoodsBeanPrice(bean);
                                 }
                             }
                         }
-                        for (ContentRes.DataBean.TyPadIndexNewRecommendgoodBean recommendgoodBean : contentRes.getData().getTy_pad_index_new_recommendgood()){
-                            if(recommendgoodBean.getGoods() != null){
-                                for (GoodsBean bean : recommendgoodBean.getGoods()){
+                        for (ContentRes.DataBean.TyPadIndexNewRecommendgoodBean recommendgoodBean : contentRes.getData().getTy_pad_index_new_recommendgood()) {
+                            if (recommendgoodBean.getGoods() != null) {
+                                for (GoodsBean bean : recommendgoodBean.getGoods()) {
                                     handlerGoodsBeanPrice(bean);
                                 }
                             }
@@ -125,10 +146,10 @@ public class HomeActivity extends AppCompatActivity {
                 .doOnNext(new Consumer<ContentRes>() {
                     @Override
                     public void accept(@NonNull ContentRes contentRes) throws Exception {
-                        if(contentRes.getData().getTy_pad_index_new_xianshitehui().getColor() != null){
+                        if (contentRes.getData().getTy_pad_index_new_xianshitehui().getColor() != null) {
                             String color = contentRes.getData().getTy_pad_index_new_xianshitehui().getColor();
-                            if(contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null){
-                                for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()){
+                            if (contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null) {
+                                for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()) {
                                     String html = "<font color='" + color + "'>" + bean.getCheapPrice() + "</font>";
                                     bean.setCheapPrice(html);
                                     bean.setSetColor(true);
@@ -136,11 +157,11 @@ public class HomeActivity extends AppCompatActivity {
                             }
                         }
 
-                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean: contentRes.getData().getTy_pad_index_new_goodstopic()){
-                            if(tyPadIndexNewGoodstopicBean.getColor() != null){
+                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
+                            if (tyPadIndexNewGoodstopicBean.getColor() != null) {
                                 String color = tyPadIndexNewGoodstopicBean.getColor();
-                                if(tyPadIndexNewGoodstopicBean.getGoods() != null){
-                                    for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()){
+                                if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
+                                    for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
                                         String html = "<font color='" + color + "'>" + bean.getCheapPrice() + "</font>";
                                         bean.setCheapPrice(html);
                                         bean.setSetColor(true);
@@ -155,8 +176,9 @@ public class HomeActivity extends AppCompatActivity {
                 .subscribe(new Observer<ContentRes>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                        disposable.add(d);
                     }
+
                     @Override
                     public void onNext(@NonNull ContentRes contentRes) {
                         initView(contentRes);
@@ -176,18 +198,17 @@ public class HomeActivity extends AppCompatActivity {
 
     private void handlerGoodsBeanPrice(GoodsBean bean) {
         GoodsBean.ActiveinfoBean aBean = bean.getActiveinfo();
-        if(aBean != null && aBean.getActive_type() != null && aBean.getActive_type().equals("1")){
-            bean.setCheapPrice(aBean.getActive_price());
-            bean.setNormalPrice(bean.getPrice());
-        }else{
-            bean.setCheapPrice(bean.getPrice());
-            bean.setNormalPrice(bean.getMarket_price());
+        if (aBean != null && aBean.getActive_type() != null && aBean.getActive_type().equals("1")) {
+            bean.setCheapPrice(Constants.PRICE_TITLE + aBean.getActive_price());
+            bean.setNormalPrice(Constants.PRICE_TITLE + bean.getPrice());
+        } else {
+            bean.setCheapPrice(Constants.PRICE_TITLE + bean.getPrice());
+            bean.setNormalPrice(Constants.PRICE_TITLE + bean.getMarket_price());
         }
     }
 
     private void initView(final ContentRes contentRes) {
         View headView = LayoutInflater.from(this).inflate(R.layout.home_head, null);
-
         //处理Banner
         Banner banner = (Banner) headView.findViewById(R.id.banner);
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
@@ -203,21 +224,41 @@ public class HomeActivity extends AppCompatActivity {
         banner.setImages(contentRes.getData().getTy_pad_index_new_slider());
         banner.start();
 
+        View hhygIcon = headView.findViewById(R.id.hhyg_icon);
+        hhygIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent();
+                it.setClass(HomeActivity.this,SalerMainPageActivity.class);
+                startActivity(it);
+            }
+        });
+        View searchWrap = headView.findViewById(R.id.search_wrap);
+        searchWrap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent();
+                it.setClass(HomeActivity.this,SearchActivity.class);
+                startActivity(it);
+            }
+        });
+
         RecyclerView cateRv = (RecyclerView) headView.findViewById(R.id.cate_rv);
-        cateRv.setLayoutManager(new GridLayoutManager(this,6,GridLayoutManager.VERTICAL,false));
+        cateRv.setNestedScrollingEnabled(false);
+        cateRv.setLayoutManager(new GridLayoutManager(this, 6, GridLayoutManager.VERTICAL, false));
         CateAdapter cateAdapter = new CateAdapter(this);
         cateAdapter.setmData((ArrayList<ContentRes.DataBean.TyPadIndexNewCateBean>) contentRes.getData().getTy_pad_index_new_cate());
         cateRv.setAdapter(cateAdapter);
 
-
         ViewGroup bannerGroup = (ViewGroup) headView.findViewById(R.id.banner_item);
-        if(contentRes.getData().getTy_pad_index_new_xianshitehui() != null){
+        if (contentRes.getData().getTy_pad_index_new_xianshitehui() != null) {
             ContentRes.DataBean.TyPadIndexNewXianshitehuiBean baen = contentRes.getData().getTy_pad_index_new_xianshitehui();
             View bannerView = LayoutInflater.from(this).inflate(R.layout.home_banner, null);
             ImageView imgV = (ImageView) bannerView.findViewById(R.id.banner_img);
             Picasso.with(this).load(baen.getImgurl()).into(imgV);
             RecyclerView rv = (RecyclerView) bannerView.findViewById(R.id.banner_rv);
-            rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+            rv.setNestedScrollingEnabled(false);
+            rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rv.setHasFixedSize(true);
             BannerAdapter bannerAdapter = new BannerAdapter(this);
             bannerAdapter.setmData((ArrayList<GoodsBean>) baen.getGoods());
@@ -225,15 +266,16 @@ public class HomeActivity extends AppCompatActivity {
             bannerGroup.addView(bannerView);
         }
 
-        if(contentRes.getData().getTy_pad_index_new_hotbrand() != null){
+        if (contentRes.getData().getTy_pad_index_new_hotbrand() != null) {
             ContentRes.DataBean.TyPadIndexNewHotbrandBean bean = contentRes.getData().getTy_pad_index_new_hotbrand();
             View brandBanner = LayoutInflater.from(this).inflate(R.layout.home_banner, null);
             ImageView imgV = (ImageView) brandBanner.findViewById(R.id.banner_img);
-            if(!TextUtils.isEmpty(bean.getMore_brand_image())){
+            if (!TextUtils.isEmpty(bean.getMore_brand_image())) {
                 Picasso.with(this).load(bean.getMore_brand_image()).into(imgV);
             }
             RecyclerView rv = (RecyclerView) brandBanner.findViewById(R.id.banner_rv);
-            rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+            rv.setNestedScrollingEnabled(false);
+            rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rv.setHasFixedSize(true);
             BrandBannerAdapter brandBannerAdapter = new BrandBannerAdapter(this);
             brandBannerAdapter.setmData((ArrayList<ContentRes.DataBean.TyPadIndexNewHotbrandBean.HotbrandBean>) bean.getHotbrand());
@@ -241,13 +283,14 @@ public class HomeActivity extends AppCompatActivity {
             bannerGroup.addView(brandBanner);
         }
 
-        if(contentRes.getData().getTy_pad_index_new_goodstopic() != null){
-            for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean newGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()){
+        if (contentRes.getData().getTy_pad_index_new_goodstopic() != null) {
+            for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean newGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
                 View bannerView = LayoutInflater.from(this).inflate(R.layout.home_banner, null);
                 ImageView imgV = (ImageView) bannerView.findViewById(R.id.banner_img);
                 Picasso.with(this).load(newGoodstopicBean.getImgurl()).into(imgV);
                 RecyclerView rv = (RecyclerView) bannerView.findViewById(R.id.banner_rv);
-                rv.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+                rv.setNestedScrollingEnabled(false);
+                rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 rv.setHasFixedSize(true);
                 BannerAdapter bannerAdapter = new BannerAdapter(this);
                 bannerAdapter.setmData((ArrayList<GoodsBean>) newGoodstopicBean.getGoods());
@@ -256,48 +299,41 @@ public class HomeActivity extends AppCompatActivity {
             }
         }
 
-
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 4,GridLayoutManager.VERTICAL, false);
-        final ArrayList<ContentRes.DataBean.TyPadIndexNewRecommendgoodBean> datas = (ArrayList<ContentRes.DataBean.TyPadIndexNewRecommendgoodBean>) contentRes.getData().getTy_pad_index_new_recommendgood();
-        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                int spansize = 4;
-                if(datas != null){
-                    int size = datas.size();
-                    int heads[] = new int[size];
-                    int count = 0;
-                    for (int index = 0; index < size ; index ++){
-                        ContentRes.DataBean.TyPadIndexNewRecommendgoodBean bean = datas.get(index);
-                        count += 1;
-                        if(bean.getGoods() != null){
-                            count += bean.getGoods().size();
+        if (contentRes.getData().getTy_pad_index_new_recommendgood() != null) {
+            for (ContentRes.DataBean.TyPadIndexNewRecommendgoodBean recommendBean : contentRes.getData().getTy_pad_index_new_recommendgood()) {
+                View rvWrap = LayoutInflater.from(this).inflate(R.layout.home_goods_rv, null);
+                RecyclerView rv = (RecyclerView) rvWrap.findViewById(R.id.rv);
+                GridLayoutManager gridlayout = new GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false);
+                gridlayout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                    @Override
+                    public int getSpanSize(int position) {
+                        int size = 4;
+                        if (position != 0) {
+                            size = 1;
                         }
-                        if(index > 0){
-                            heads[index] = count + 1;
-                        }
+                        return size;
                     }
-                    for (int index = 0 ; index < size ;index ++){
-                        if(position == heads[index]){
-                            spansize = 1;
-                        }
-                    }
-                }
-                return spansize;
+                });
+                rv.setLayoutManager(gridlayout);
+                rv.setNestedScrollingEnabled(false);
+                GoodsAdapter goodsAdapter = new GoodsAdapter(this);
+                goodsAdapter.setData(recommendBean);
+                rv.setAdapter(goodsAdapter);
+                bannerGroup.addView(rvWrap);
             }
-        });
-        GoodsAdapter goodsAdapter = new GoodsAdapter(this);
-        goodsAdapter.setmData((ArrayList<ContentRes.DataBean.TyPadIndexNewRecommendgoodBean>) contentRes.getData().getTy_pad_index_new_recommendgood());
-        wrapper = new HeaderAndFooterWrapper(goodsAdapter);
-        wrapper.addHeaderView(headView);
-        rv.setLayoutManager(gridLayoutManager);
-        rv.setAdapter(wrapper);
+        }
+        scrollview.addView(headView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.clear();
     }
 
     @OnClick({R.id.home, R.id.brand, R.id.cate, R.id.shopcat})
@@ -314,6 +350,20 @@ public class HomeActivity extends AppCompatActivity {
                 it.setClass(HomeActivity.this, ShopCartActivity.class);
                 break;
         }
+        startActivity(it);
+    }
+
+    @OnClick(R.id.hhyg_icon)
+    public void onViewClicked1(View view) {
+        Intent it = new Intent();
+        it.setClass(this,SalerMainPageActivity.class);
+        startActivity(it);
+    }
+
+    @OnClick(R.id.search_wrap)
+    public void onViewClicked2(View view) {
+        Intent it = new Intent();
+        it.setClass(this,SearchActivity.class);
         startActivity(it);
     }
 

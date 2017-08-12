@@ -13,6 +13,7 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Retrofit;
 
 /**
@@ -48,4 +49,28 @@ public class HomeModule {
         return res;
     }
 
+    @Provides
+    HeaderAndFooterWrapper provideWrapper(){
+        return new HeaderAndFooterWrapper(new RecyclerView.Adapter() {
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                return null;
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+            }
+
+            @Override
+            public int getItemCount() {
+                return 0;
+            }
+        });
+    }
+
+    @Provides
+    CompositeDisposable provideDisposable(){
+        return new CompositeDisposable();
+    }
 }
