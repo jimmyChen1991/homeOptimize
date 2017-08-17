@@ -1,5 +1,7 @@
 package com.hhyg.TyClosing.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,15 +12,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.apiService.HomeSevice;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
 import com.hhyg.TyClosing.config.Constants;
 import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
 import com.hhyg.TyClosing.di.componet.DaggerHomeComponent;
@@ -26,7 +35,10 @@ import com.hhyg.TyClosing.di.module.CommonNetParamModule;
 import com.hhyg.TyClosing.entities.home.ContentRes;
 import com.hhyg.TyClosing.entities.home.GoodsBean;
 import com.hhyg.TyClosing.entities.home.ReqParam;
+import com.hhyg.TyClosing.entities.search.HotsearchWord;
 import com.hhyg.TyClosing.global.MyApplication;
+import com.hhyg.TyClosing.mgr.ClosingRefInfoMgr;
+import com.hhyg.TyClosing.mgr.ShoppingCartMgr;
 import com.hhyg.TyClosing.ui.adapter.home.BannerAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.BrandBannerAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.CateAdapter;
@@ -48,6 +60,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -55,6 +68,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -88,7 +102,14 @@ public class HomeActivity extends AppCompatActivity {
     View searchWrap;
     @Inject
     CompositeDisposable disposable;
-
+    @Inject
+    HotsearchWordSevice recommonSevice;
+    @BindView(R.id.hotsearch_content)
+    TextView topbarHotSearchWord;
+    TextView searchWord;
+    @BindView(R.id.shopcat_point)
+    TextView shopcartNum;
+    Banner mBanner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +118,12 @@ public class HomeActivity extends AppCompatActivity {
         home.setBackgroundResource(R.drawable.home_icon_pressed);
         topSearchBar.setVisibility(View.GONE);
         swipeContainer.setProgressViewEndTarget(true,200);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fillScrollData();
+            }
+        });
         DaggerHomeComponent.builder()
                 .applicationComponent(MyApplication.GetInstance().getComponent())
                 .commonNetParamComponent(DaggerCommonNetParamComponent.builder().commonNetParamModule(new CommonNetParamModule()).build())
@@ -112,6 +139,11 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+        fillScrollData();
+        Log.d(TAG, "created");
+    }
+
+    private void fillScrollData() {
         Observable.just(param)
                 .flatMap(new Function<ReqParam, ObservableSource<ContentRes>>() {
                     @Override
@@ -173,6 +205,14 @@ public class HomeActivity extends AppCompatActivity {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        if(swipeContainer.isRefreshing()){
+                            swipeContainer.setRefreshing(false);
+                        }
+                    }
+                })
                 .subscribe(new Observer<ContentRes>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
@@ -181,12 +221,67 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(@NonNull ContentRes contentRes) {
+                        Log.d(TAG, "homeContent_next");
+                        if(scrollview.getChildCount() != 0){
+                            scrollview.removeAllViews();
+                        }
                         initView(contentRes);
+                        getSearchWord();
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         Log.d(TAG, e.toString());
+                        Toasty.error(HomeActivity.this,getString(R.string.netconnect_exception), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d(TAG, "completer");
+                    }
+                });
+    }
+
+    private void getSearchWord() {
+        Observable.just(param)
+                .flatMap(new Function<ReqParam, ObservableSource<HotsearchWord>>() {
+                    @Override
+                    public ObservableSource<HotsearchWord> apply(@NonNull ReqParam reqParam) throws Exception {
+                        return recommonSevice.getRecommend(gson.toJson(reqParam));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HotsearchWord>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(@NonNull HotsearchWord hotsearchWord) {
+                        StringBuilder sb = new StringBuilder();
+                        if(hotsearchWord.getRecommend() == null){
+                            return;
+                        }
+                        int size = hotsearchWord.getRecommend().size();
+                        for (int index = 0 ; index < size ; index ++){
+                            HotsearchWord.RecommendBean bean  = hotsearchWord.getRecommend().get(index);
+                            sb.append(bean.getHotword());
+                            if(index != size -1){
+                                sb.append(" | ");
+                            }
+                        }
+                        searchWord.setText(sb.toString());
+                        topbarHotSearchWord.setText(sb.toString());
+                        MyApplication.GetInstance().setHotSearchWord(sb.toString());
+                        Log.d(TAG, "hotsearchword_next");
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
                     }
 
                     @Override
@@ -209,20 +304,24 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initView(final ContentRes contentRes) {
         View headView = LayoutInflater.from(this).inflate(R.layout.home_head, null);
+        searchWord = (TextView) headView.findViewById(R.id.hotsearch_word);
         //处理Banner
-        Banner banner = (Banner) headView.findViewById(R.id.banner);
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-        banner.setImageLoader(new BannerImageLoader());
-        banner.setDelayTime(3000);
-        banner.setIndicatorGravity(BannerConfig.CENTER);
-        banner.setBannerAnimation(Transformer.DepthPage);
-        banner.setOnBannerListener(new OnBannerListener() {
+        mBanner = (Banner) headView.findViewById(R.id.banner);
+        mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        mBanner.setImageLoader(new BannerImageLoader());
+        mBanner.setDelayTime(3000);
+        mBanner.setIndicatorGravity(BannerConfig.CENTER);
+        mBanner.setBannerAnimation(Transformer.DepthPage);
+        mBanner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
+                Intent intent = new Intent(HomeActivity.this, SpecialActivity.class);
+                intent.putExtra("specialid", contentRes.getData().getTy_pad_index_new_slider().get(position).getSpecialid());
+                startActivity(intent);
             }
         });
-        banner.setImages(contentRes.getData().getTy_pad_index_new_slider());
-        banner.start();
+        mBanner.setImages(contentRes.getData().getTy_pad_index_new_slider());
+        mBanner.start();
 
         View hhygIcon = headView.findViewById(R.id.hhyg_icon);
         hhygIcon.setOnClickListener(new View.OnClickListener() {
@@ -251,16 +350,51 @@ public class HomeActivity extends AppCompatActivity {
         cateRv.setAdapter(cateAdapter);
 
         ViewGroup bannerGroup = (ViewGroup) headView.findViewById(R.id.banner_item);
+        if(contentRes.getData().getTy_pad_index_new_advertising() != null){
+            for (final ContentRes.DataBean.TyPadIndexNewAdvertisingBean advertisingBean :contentRes.getData().getTy_pad_index_new_advertising()){
+                ImageView adImg = (ImageView) LayoutInflater.from(this).inflate(R.layout.home_advertising, null);
+                bannerGroup.addView(adImg);
+                int screenWidth = 1536;
+                ViewGroup.LayoutParams lp = adImg.getLayoutParams();
+                lp.width = screenWidth;
+                lp.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                adImg.setLayoutParams(lp);
+                adImg.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent it = new Intent(v.getContext(), SpecialActivity.class);
+                        it.putExtra("specialid", advertisingBean.getSpecialid());
+                        v.getContext().startActivity(it);
+                    }
+                });
+                adImg.setMaxWidth(screenWidth);
+                adImg.setMaxHeight(screenWidth * 5);
+                if(!TextUtils.isEmpty(advertisingBean.getImgurl())){
+                    Picasso.with(this).load(advertisingBean.getImgurl()).into(adImg);
+                }
+            }
+        }
         if (contentRes.getData().getTy_pad_index_new_xianshitehui() != null) {
-            ContentRes.DataBean.TyPadIndexNewXianshitehuiBean baen = contentRes.getData().getTy_pad_index_new_xianshitehui();
+            final ContentRes.DataBean.TyPadIndexNewXianshitehuiBean baen = contentRes.getData().getTy_pad_index_new_xianshitehui();
             View bannerView = LayoutInflater.from(this).inflate(R.layout.home_banner, null);
             ImageView imgV = (ImageView) bannerView.findViewById(R.id.banner_img);
-            Picasso.with(this).load(baen.getImgurl()).into(imgV);
+            imgV.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent it = new Intent(v.getContext(), SpecialActivity.class);
+                    it.putExtra("specialid", baen.getSpecialid());
+                    v.getContext().startActivity(it);
+                }
+            });
+            if(!TextUtils.isEmpty(baen.getImgurl())){
+                Picasso.with(this).load(baen.getImgurl()).into(imgV);
+            }
             RecyclerView rv = (RecyclerView) bannerView.findViewById(R.id.banner_rv);
             rv.setNestedScrollingEnabled(false);
             rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
             rv.setHasFixedSize(true);
             BannerAdapter bannerAdapter = new BannerAdapter(this);
+            bannerAdapter.setSpecialId(baen.getSpecialid());
             bannerAdapter.setmData((ArrayList<GoodsBean>) baen.getGoods());
             rv.setAdapter(bannerAdapter);
             bannerGroup.addView(bannerView);
@@ -284,15 +418,26 @@ public class HomeActivity extends AppCompatActivity {
         }
 
         if (contentRes.getData().getTy_pad_index_new_goodstopic() != null) {
-            for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean newGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
+            for (final ContentRes.DataBean.TyPadIndexNewGoodstopicBean newGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
                 View bannerView = LayoutInflater.from(this).inflate(R.layout.home_banner, null);
                 ImageView imgV = (ImageView) bannerView.findViewById(R.id.banner_img);
-                Picasso.with(this).load(newGoodstopicBean.getImgurl()).into(imgV);
+                imgV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent it = new Intent(v.getContext(), SpecialActivity.class);
+                        it.putExtra("specialid", newGoodstopicBean.getSpecialid());
+                        v.getContext().startActivity(it);
+                    }
+                });
+                if(!TextUtils.isEmpty(newGoodstopicBean.getImgurl())){
+                    Picasso.with(this).load(newGoodstopicBean.getImgurl()).into(imgV);
+                }
                 RecyclerView rv = (RecyclerView) bannerView.findViewById(R.id.banner_rv);
                 rv.setNestedScrollingEnabled(false);
                 rv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
                 rv.setHasFixedSize(true);
                 BannerAdapter bannerAdapter = new BannerAdapter(this);
+                bannerAdapter.setSpecialId(newGoodstopicBean.getSpecialid());
                 bannerAdapter.setmData((ArrayList<GoodsBean>) newGoodstopicBean.getGoods());
                 rv.setAdapter(bannerAdapter);
                 bannerGroup.addView(bannerView);
@@ -325,9 +470,59 @@ public class HomeActivity extends AppCompatActivity {
         scrollview.addView(headView);
     }
 
+    private void unregistSaler() {
+        final Dialog dialog = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.allshop_salerlogout_dialog, null);
+        dialog.show();
+        dialog.getWindow().setContentView(layout);
+        dialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+        dialog.getWindow().setLayout(880, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        TextView exitContent=(TextView)layout.findViewById(R.id.warnning_content);
+        exitContent.setText("确认退出账号  "+ ClosingRefInfoMgr.getInstance().getSalerInfo().getUserName()+"  " +ClosingRefInfoMgr.getInstance().getSalerInfo().getSalerName()+"?");
+        Button exitBtn = (Button) layout.findViewById(R.id.summit_btn);
+        exitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent it = new Intent();
+                it.setClass(HomeActivity.this, SalerLoginActivity.class);
+                startActivity(it);
+                finish();
+            }
+        });
+        Button cancelBtn = (Button) layout.findViewById(R.id.cancel_btn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        shopcartNum.setText(String.valueOf(ShoppingCartMgr.getInstance().getAll().size()));
+        if(mBanner != null){
+            mBanner.startAutoPlay();
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            unregistSaler();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mBanner != null){
+            mBanner.stopAutoPlay();
+        }
     }
 
     @Override
@@ -336,7 +531,7 @@ public class HomeActivity extends AppCompatActivity {
         disposable.clear();
     }
 
-    @OnClick({R.id.home, R.id.brand, R.id.cate, R.id.shopcat})
+    @OnClick({R.id.brand, R.id.cate, R.id.shopcat})
     public void onViewClicked(View view) {
         Intent it = new Intent();
         switch (view.getId()) {
@@ -372,7 +567,9 @@ public class HomeActivity extends AppCompatActivity {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
             ContentRes.DataBean.TyPadIndexNewSliderBean bean = (ContentRes.DataBean.TyPadIndexNewSliderBean) path;
-            Picasso.with(context).load(bean.getImgurl()).into(imageView);
+            if(!TextUtils.isEmpty(bean.getImgurl())){
+                Picasso.with(context).load(bean.getImgurl()).into(imageView);
+            }
         }
 
     }

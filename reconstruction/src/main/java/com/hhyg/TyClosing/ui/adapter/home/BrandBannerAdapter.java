@@ -1,7 +1,9 @@
 package com.hhyg.TyClosing.ui.adapter.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,10 @@ import android.widget.TextView;
 
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.entities.home.ContentRes;
+import com.hhyg.TyClosing.entities.search.SearchGoodsParam;
+import com.hhyg.TyClosing.entities.search.SearchType;
+import com.hhyg.TyClosing.ui.BrandActivity;
+import com.hhyg.TyClosing.ui.SearchGoodActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -54,12 +60,33 @@ public class BrandBannerAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if(holder instanceof BrandBannerAdapter.MainViewHolder){
-            ContentRes.DataBean.TyPadIndexNewHotbrandBean.HotbrandBean bean = mData.get(position);
+            final ContentRes.DataBean.TyPadIndexNewHotbrandBean.HotbrandBean bean = mData.get(position);
             ((MainViewHolder) holder).englishName.setText(bean.getBrandname_en());
             ((MainViewHolder) holder).chineseName.setText(bean.getBrandname_cn());
-            Picasso.with(holder.itemView.getContext()).load(bean.getImgurl()).into(((MainViewHolder) holder).img);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), SearchGoodActivity.class);
+                    SearchGoodsParam.DataBean sbean = new SearchGoodsParam.DataBean();
+                    sbean.setBrandId(bean.getBrandid());
+                    intent.putExtra(v.getContext().getString(R.string.search_token),sbean);
+                    intent.putExtra(v.getContext().getString(R.string.search_content),bean.getBrandname());
+                    intent.putExtra(v.getContext().getString(R.string.search_type), SearchType.BRAND.ordinal());
+                    v.getContext().startActivity(intent);
+                }
+            });
+            if(!TextUtils.isEmpty(bean.getImgurl())){
+                Picasso.with(holder.itemView.getContext()).load(bean.getImgurl()).into(((MainViewHolder) holder).img);
+            }
         }else if(holder instanceof BrandBannerAdapter.MoreViewHolder){
             ((MoreViewHolder) holder).img.setBackgroundResource(R.drawable.normal_seemore);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(v.getContext(), BrandActivity.class);
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
 
     }

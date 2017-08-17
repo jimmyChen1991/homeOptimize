@@ -87,7 +87,7 @@ public class GoodsAdapter extends RecyclerView.Adapter{
         }else if (holder instanceof MainViewHolder){
             final GoodsBean bean = data.getGoods().get(position - 1);
             ((MainViewHolder) holder).brand.setText(bean.getBrandname());
-            ((MainViewHolder) holder).attr.setText(bean.getAttr_info());
+            ((MainViewHolder) holder).attr.setText(bean.getName());
             if(!TextUtils.isEmpty(bean.getJiaobiao())){
                 ((MainViewHolder) holder).jiaobiao.setVisibility(View.VISIBLE);
                 ((MainViewHolder) holder).jiaobiao.setText(bean.getJiaobiao());
@@ -116,7 +116,9 @@ public class GoodsAdapter extends RecyclerView.Adapter{
                     v.getContext().startActivity(it);
                 }
             });
-            Picasso.with(holder.itemView.getContext()).load(bean.getImage()).into(((MainViewHolder) holder).img);
+            if(!TextUtils.isEmpty(bean.getImage())){
+                Picasso.with(holder.itemView.getContext()).load(bean.getImage()).into(((MainViewHolder) holder).img);
+            }
         }
 
     }

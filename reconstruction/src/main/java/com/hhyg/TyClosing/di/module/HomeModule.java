@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.apiService.HomeSevice;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
 import com.hhyg.TyClosing.entities.CommonParam;
 import com.hhyg.TyClosing.entities.home.ReqParam;
 import com.zhy.adapter.recyclerview.wrapper.HeaderAndFooterWrapper;
@@ -72,5 +73,10 @@ public class HomeModule {
     @Provides
     CompositeDisposable provideDisposable(){
         return new CompositeDisposable();
+    }
+
+    @Provides
+    HotsearchWordSevice provideHotsearchSevice(@Named("slowIndexApi") Retrofit retrofit){
+        return retrofit.create(HotsearchWordSevice.class);
     }
 }

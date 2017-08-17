@@ -51,6 +51,7 @@ public class MyApplication extends Application implements HttpUtil {
     public String UUID;
     public String SaleId;
 	private String SpecialCode;
+    private String hotSearchWord;
     public final int SUC = 0x1000;
     private final int NET_TIMEOUT = 30*1000;
     private ApplicationComponent component;
@@ -79,6 +80,14 @@ public class MyApplication extends Application implements HttpUtil {
 
     public ApplicationComponent getComponent() {
         return component;
+    }
+
+    public void setHotSearchWord(String hotSearchWord) {
+        this.hotSearchWord = hotSearchWord;
+    }
+
+    public String getHotSearchWord() {
+        return hotSearchWord;
     }
 
     public void setUserSelectAir(PickUpInfo p){

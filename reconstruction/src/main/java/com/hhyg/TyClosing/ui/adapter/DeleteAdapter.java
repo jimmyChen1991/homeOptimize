@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -214,7 +215,9 @@ public class DeleteAdapter extends BaseAdapter {
 //		holder.img.setTag(uri);
 //		ImageAware imageAware = new ImageViewAware(holder.img, false);
 //		ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
-		Picasso.with(convertView.getContext()).load(info.imgUrl).into(holder.img);
+		if(!TextUtils.isEmpty(info.imgUrl)){
+			Picasso.with(convertView.getContext()).load(info.imgUrl).into(holder.img);
+		}
 		return convertView;
 	}
 

@@ -58,6 +58,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -1234,7 +1235,9 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 			ImageView imageView = new ImageView(GoodsInfoActivity.this);
 //			ImageAware imageAware = new ImageViewAware(imageView, false);
 //			ImageLoader.getInstance().displayImage(imgs.get(position), imageAware, ImageHelper.initBarcodePathOption());
-			Picasso.with(GoodsInfoActivity.this).load(imgs.get(position)).resize(400,400).centerCrop().into(imageView);
+			if(!TextUtils.isEmpty(imgs.get(position))){
+				Picasso.with(GoodsInfoActivity.this).load(imgs.get(position)).resize(400,400).centerCrop().into(imageView);
+			}
 			((ViewPager) container).addView(imageView, 0);
 			return imageView;
 		}

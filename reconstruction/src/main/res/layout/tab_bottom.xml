@@ -88,4 +88,27 @@
         android:layout_marginRight="68dip"
         android:layout_marginTop="@dimen/dp_5"
         android:background="@drawable/shopcart_icon" />
+    <TextView
+        android:id="@+id/brand_point"
+        android:layout_width="@dimen/dp_18"
+        android:layout_height="@dimen/dp_18"
+        android:layout_alignTop="@id/brand"
+        android:layout_alignRight="@id/brand"
+        android:gravity="center"
+        android:background="@drawable/bottom_point"
+        android:textColor="@color/ffffff"
+        android:textSize="@dimen/sp_12"
+        android:text="N"
+        />
+    <TextView
+        android:id="@+id/shopcat_point"
+        android:layout_width="@dimen/dp_18"
+        android:layout_height="@dimen/dp_18"
+        android:layout_alignTop="@id/shopcat"
+        android:layout_alignRight="@id/shopcat"
+        android:gravity="center"
+        android:background="@drawable/bottom_point"
+        android:textColor="@color/ffffff"
+        android:textSize="@dimen/sp_12"
+        />
 </RelativeLayout>

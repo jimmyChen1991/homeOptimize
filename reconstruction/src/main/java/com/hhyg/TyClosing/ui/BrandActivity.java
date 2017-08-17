@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.gjiazhe.wavesidebar.WaveSideBar;
@@ -26,6 +28,7 @@ import com.hhyg.TyClosing.entities.brand.Res;
 import com.hhyg.TyClosing.entities.search.SearchGoodsParam;
 import com.hhyg.TyClosing.entities.search.SearchType;
 import com.hhyg.TyClosing.global.MyApplication;
+import com.hhyg.TyClosing.mgr.ShoppingCartMgr;
 import com.hhyg.TyClosing.ui.adapter.brand.BrandAdapter;
 
 import java.util.ArrayList;
@@ -37,6 +40,7 @@ import javax.xml.transform.Source;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import es.dmoral.toasty.Toasty;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -79,6 +83,10 @@ public class BrandActivity extends AppCompatActivity {
     RecyclerView rvContacts;
     @BindView(R.id.side_bar)
     WaveSideBar sideBar;
+    @BindView(R.id.hotsearch_content)
+    TextView hotWord;
+    @BindView(R.id.shopcat_point)
+    TextView shopcartNum;
     private BrandAdapter mAdapter;
 
     @Override
@@ -93,6 +101,9 @@ public class BrandActivity extends AppCompatActivity {
                 .inject(this);
         hhygIcon.setBackgroundResource(R.drawable.back);
         brand.setBackgroundResource(R.drawable.brand_icon_pressed);
+        if(MyApplication.GetInstance().getHotSearchWord() != null){
+            hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+        }
         Observable.just(reqParam)
                 .flatMap(new Function<ReqParam, ObservableSource<Res>>() {
                     @Override
@@ -117,6 +128,7 @@ public class BrandActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        Toasty.error(BrandActivity.this,getString(R.string.netconnect_exception), Toast.LENGTH_LONG).show();
                         Log.d(TAG, e.toString());
                     }
 
@@ -199,6 +211,11 @@ public class BrandActivity extends AppCompatActivity {
         rvContacts.setAdapter(mAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        shopcartNum.setText(String.valueOf(ShoppingCartMgr.getInstance().getAll().size()));
+    }
 
     @Override
     protected void onDestroy() {
@@ -206,18 +223,24 @@ public class BrandActivity extends AppCompatActivity {
         disposable.clear();
     }
 
-    @OnClick({R.id.hhyg_icon, R.id.search_wrap})
+    @OnClick({R.id.search_wrap})
     public void onViewClicked(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
-            case R.id.hhyg_icon:
-                intent.setClass(this, SalerMainPageActivity.class);
-                break;
             case R.id.search_wrap:
                 intent.setClass(this, SearchActivity.class);
                 break;
         }
         startActivity(intent);
+    }
+
+    @OnClick({R.id.hhyg_icon})
+    public void onViewClicked2(View view) {
+        switch (view.getId()) {
+            case R.id.hhyg_icon:
+                finish();
+                break;
+        }
     }
 
     @OnClick({R.id.home, R.id.cate, R.id.shopcat})

@@ -66,7 +66,7 @@ public class SuccessActivity extends Activity {
 		btn.setOnClickListener(new View.OnClickListener() {
 			@Override public void onClick(View v) {
 				Intent it = new Intent();
-				it.setClass(SuccessActivity.this, AllShopActivity.class);
+				it.setClass(SuccessActivity.this, HomeActivity.class);
 				startActivity(it);
 				finish();
 			}

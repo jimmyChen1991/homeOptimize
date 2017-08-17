@@ -2086,7 +2086,7 @@ public class SearchGoodActivity extends AppCompatActivity {
 
     @OnClick(R.id.backtomain)
     public void onViewClickedTomain() {
-        Intent it = new Intent(this, AllShopActivity.class);
+        Intent it = new Intent(this, HomeActivity.class);
         startActivity(it);
     }
 

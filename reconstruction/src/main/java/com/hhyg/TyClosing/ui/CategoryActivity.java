@@ -6,7 +6,9 @@ import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.allShop.info.CateInfo;
 import com.hhyg.TyClosing.fragment.CategoryContentFragment;
 import com.hhyg.TyClosing.fragment.CategoryHotFragment;
+import com.hhyg.TyClosing.global.MyApplication;
 import com.hhyg.TyClosing.log.Logger;
+import com.hhyg.TyClosing.mgr.ShoppingCartMgr;
 import com.hhyg.TyClosing.presenter.CategotyPresenter;
 import com.hhyg.TyClosing.ui.view.AllShopTopEdit;
 import com.hhyg.TyClosing.ui.view.ProgressBar;
@@ -30,6 +32,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CategoryActivity extends Activity implements CategoryView{
 	private ListView mListView;
@@ -37,18 +44,26 @@ public class CategoryActivity extends Activity implements CategoryView{
 	private CategotyPresenter mCategotyPresenter;
 	private CategoryHotFragment mCategoryHotFragment;
 	private Fragment mCurFragment;
-	private ImageButton mScan;
 	private ArrayList<CategoryContentFragment> mCategoryContentFragments;
-	private TopEdit topEdit;
 	private ProgressBar mProgressBar;
+	@BindView(R.id.hhyg_icon)
+	ImageButton hhygIcon;
+	@BindView(R.id.cate)
+	ImageButton cate;
+	@BindView(R.id.hotsearch_content)
+	TextView hotWord;
+	@BindView(R.id.shopcat_point)
+	TextView shopcartNum;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.category);
-		topEdit = new AllShopTopEdit(this);
-		topEdit.topEdit();
+		ButterKnife.bind(this);
 		findView();
 		init();
+		if(MyApplication.GetInstance().getHotSearchWord() != null){
+			hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+		}
 		mCategotyPresenter.attach(this);
 		mCategotyPresenter.fetchLastedCategotyDate();
 		Logger.GetInstance().Track("CategoryActivity on Create");
@@ -59,6 +74,7 @@ public class CategoryActivity extends Activity implements CategoryView{
 		MobclickAgent.onResume(this);
 		MobclickAgent.onPageStart("CategoryActivity");
 		Logger.GetInstance().Track("CategoryActivity on onResume");
+		shopcartNum.setText(String.valueOf(ShoppingCartMgr.getInstance().getAll().size()));
 	}
 	@Override
 	protected void onPause() {
@@ -85,15 +101,9 @@ public class CategoryActivity extends Activity implements CategoryView{
 	private void findView(){
 		mProgressBar = new SimpleProgressBar((ImageView) findViewById(R.id.infoOperating));
 		mListView = (ListView) findViewById(R.id.title_list);
-		mScan = (ImageButton) findViewById(R.id.scan);
-		mScan.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent it = new Intent();
-				it.setClass(CategoryActivity.this, CaptureActivity.class);
-				startActivity(it);
-			}
-		});
+		hhygIcon.setBackgroundResource(R.drawable.back);
+		cate.setBackgroundResource(R.drawable.cate_icon_pressed);
+
 	}
 	@Override
 	public void showCategoryView(CateInfo rootCateInfo) {
@@ -218,5 +228,40 @@ public class CategoryActivity extends Activity implements CategoryView{
 	public void disProgress() {
 		mProgressBar.stopProgress();
 		
+	}
+
+	@OnClick({R.id.search_wrap})
+	public void onViewClicked(View view) {
+		Intent intent = new Intent();
+		switch (view.getId()) {
+			case R.id.search_wrap:
+				intent.setClass(this, SearchActivity.class);
+				break;
+		}
+		startActivity(intent);
+	}
+	@OnClick({R.id.hhyg_icon})
+	public void onViewClicked2(View view) {
+		switch (view.getId()) {
+			case R.id.hhyg_icon:
+				finish();
+				break;
+		}
+	}
+	@OnClick({R.id.home, R.id.brand, R.id.shopcat})
+	public void onViewClicked1(View view) {
+		Intent intent = new Intent();
+		switch (view.getId()) {
+			case R.id.home:
+				intent.setClass(this, HomeActivity.class);
+				break;
+			case R.id.brand:
+				intent.setClass(this, BrandActivity.class);
+				break;
+			case R.id.shopcat:
+				intent.setClass(this, ShopCartActivity.class);
+				break;
+		}
+		startActivity(intent);
 	}
 }

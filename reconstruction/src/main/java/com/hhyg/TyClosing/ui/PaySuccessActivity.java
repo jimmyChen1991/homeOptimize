@@ -1,8 +1,18 @@
 package com.hhyg.TyClosing.ui;
 
+import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
+import com.hhyg.TyClosing.apiService.BindSaler2oderSevice;
+import com.hhyg.TyClosing.di.componet.CommonNetParamComponent;
+import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
+import com.hhyg.TyClosing.di.componet.DaggerPaySuccessComponent;
+import com.hhyg.TyClosing.di.module.CommonNetParamModule;
+import com.hhyg.TyClosing.entities.order.BindSalerReq;
+import com.hhyg.TyClosing.entities.order.BindSalerRes;
+import com.hhyg.TyClosing.global.MyApplication;
 import com.hhyg.TyClosing.log.Logger;
 import com.hhyg.TyClosing.mgr.ClosingRefInfoMgr;
+import com.hhyg.TyClosing.util.ProgressDialogUtil;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -10,25 +20,53 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import javax.inject.Inject;
+
+import es.dmoral.toasty.Toasty;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mjf on 16/8/18.
  */
 public class PaySuccessActivity extends Activity {
+
+    EditText editText;
+    Button commit;
+    @Inject
+    BindSaler2oderSevice sevice;
+    @Inject
+    BindSalerReq param;
+    @Inject
+    Gson gson;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.paysuccess);
-
+        DaggerPaySuccessComponent.builder()
+                .applicationComponent(MyApplication.GetInstance().getComponent())
+                .commonNetParamComponent(DaggerCommonNetParamComponent.builder().commonNetParamModule(new CommonNetParamModule()).build())
+                .build()
+                .inject(this);
         Button btn = (Button) findViewById(R.id.button_goon);
         btn.setOnClickListener(new  View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(PaySuccessActivity.this, AllShopActivity.class);
+                intent.setClass(PaySuccessActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -78,6 +116,64 @@ public class PaySuccessActivity extends Activity {
         }
 
         Logger.GetInstance().Track("PaySuccessActivity on Create");
+        editText = (EditText) findViewById(R.id.saler_num_edit);
+        commit = (Button) findViewById(R.id.commit);
+        commit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editText.getText().toString().length() == 0){
+                    Toasty.error(PaySuccessActivity.this,"工号不可为空", Toast.LENGTH_SHORT).show();
+                }else{
+                    commitSalerNum(editText.getText().toString());
+                }
+            }
+        });
+
+    }
+
+    private void commitSalerNum(final String id) {
+        param.setBianhao(id);
+        param.setOrdersn(getIntent().getStringExtra("orderSn"));
+        Observable.just(param)
+                .flatMap(new Function<BindSalerReq, ObservableSource<BindSalerRes>>() {
+                    @Override
+                    public ObservableSource<BindSalerRes> apply(@NonNull BindSalerReq bindSalerReq) throws Exception {
+                        return sevice.bindSaler(gson.toJson(bindSalerReq));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doFinally(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        ProgressDialogUtil.hide();
+                    }
+                })
+                .subscribe(new Observer<BindSalerRes>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        ProgressDialogUtil.show(PaySuccessActivity.this);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull BindSalerRes bindSalerRes) {
+                        if(bindSalerRes.getErrcode() == 1){
+                            Toasty.success(PaySuccessActivity.this,bindSalerRes.getMsg(),Toast.LENGTH_LONG).show();
+                        }else{
+                            Toasty.error(PaySuccessActivity.this,bindSalerRes.getMsg(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Toasty.error(PaySuccessActivity.this,getString(R.string.netconnect_exception),Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     public void onBackPressed() {

@@ -16,6 +16,7 @@ import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.entities.home.GoodsBean;
 import com.hhyg.TyClosing.ui.CategoryActivity;
 import com.hhyg.TyClosing.ui.GoodsInfoActivity;
+import com.hhyg.TyClosing.ui.SpecialActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,11 +29,19 @@ import butterknife.ButterKnife;
  */
 
 public class BannerAdapter extends RecyclerView.Adapter{
-
+    private String specialId;
     private int NORMAL_TYPE = 0x0001;
     private int LAST_ITEM_TYPE = 0x0002;
     private LayoutInflater inflater;
     private ArrayList<GoodsBean> mData;
+
+    public void setSpecialId(String specialId) {
+        this.specialId = specialId;
+    }
+
+    public String getSpecialId() {
+        return specialId;
+    }
 
     public BannerAdapter(Context context) {
         inflater = LayoutInflater.from(context);
@@ -63,7 +72,7 @@ public class BannerAdapter extends RecyclerView.Adapter{
         if(holder instanceof MainViewHolder){
             final GoodsBean bean = mData.get(position);
             ((MainViewHolder) holder).brand.setText(bean.getBrandname());
-            ((MainViewHolder) holder).attr.setText(bean.getAttr_info());
+            ((MainViewHolder) holder).attr.setText(bean.getName());
             if(!TextUtils.isEmpty(bean.getJiaobiao())){
                 ((MainViewHolder) holder).jiaobiao.setVisibility(View.VISIBLE);
                 ((MainViewHolder) holder).jiaobiao.setText(bean.getJiaobiao());
@@ -92,13 +101,16 @@ public class BannerAdapter extends RecyclerView.Adapter{
                     v.getContext().startActivity(it);
                 }
             });
-            Picasso.with(holder.itemView.getContext()).load(bean.getImage()).into(((MainViewHolder) holder).img);
+            if(!TextUtils.isEmpty(bean.getImage())){
+                Picasso.with(holder.itemView.getContext()).load(bean.getImage()).into(((MainViewHolder) holder).img);
+            }
         }else if(holder instanceof MoreViewHolder){
             ((MoreViewHolder) holder).img.setBackgroundResource(R.drawable.normal_seemore);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent it = new Intent(v.getContext(), CategoryActivity.class);
+                    Intent it = new Intent(v.getContext(), SpecialActivity.class);
+                    it.putExtra("specialid", specialId);
                     v.getContext().startActivity(it);
                 }
             });

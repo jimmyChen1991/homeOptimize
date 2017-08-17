@@ -54,7 +54,7 @@ public class Constants {
 		1.入框的默认参数
 		2.友盟SDK是否处在开发状态
 	*/
-	public static boolean IS_DEBUG_MODE = false;
+	public static boolean IS_DEBUG_MODE = true;
 
 	//是否打开日志开关，调试使用，日志功能稳定后会删除
 	public static final boolean IS_LOG_OPEN = false;
@@ -62,7 +62,7 @@ public class Constants {
 	public static final String V4BUYCONDITIONURL = "http://commonapi.mianshui365.com/xiangou.html";//销售主页里的限购条件
 
 
-	private static  NetrulConfig url = new UrlConfig4Active();
+	private static  NetrulConfig url = new UrlConfig4Test();
 	
 	public static final String getIndexUrl(){
 		return url.getIndexUrl();

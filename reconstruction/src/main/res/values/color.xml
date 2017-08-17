@@ -17,4 +17,5 @@
     <color name="gray_f2">#f2f2f2</color>
     <color name="cheap_price">#a40038</color>
     <color name="price">#cccccc</color>
+    <color name="promotion">#d71818</color>
 </resources>

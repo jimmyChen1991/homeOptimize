@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -424,7 +425,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, SpecialInfo item) {
 //			ImageLoader.getInstance().displayImage(item.netUri, viewHolder.ImageItem, ImageHelper.initSpecialPathOption());
-			Picasso.with(SearchActivity.this).load(item.netUri).into(viewHolder.ImageItem);
+			if(!TextUtils.isEmpty(item.netUri)){
+				Picasso.with(SearchActivity.this).load(item.netUri).into(viewHolder.ImageItem);
+			}
 		}
 	}
 	@Override

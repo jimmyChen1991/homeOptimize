@@ -55,7 +55,7 @@
         android:layout_marginTop="@dimen/dp_3"
         android:layout_centerHorizontal="true"
         android:ellipsize="end"
-        android:maxEms="16"
+        android:maxEms="10"
         android:maxLines="1"
         android:textSize="@dimen/sp_12"
         android:textColor="@color/light"/>

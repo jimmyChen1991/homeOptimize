@@ -411,6 +411,8 @@ public class SalerLoginActivity extends BaseActivity{
 					jumpToAllShopActivity();
 					break;
 				}
+				default:
+					disProgressView();
 			}
 		}
 

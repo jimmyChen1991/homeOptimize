@@ -107,7 +107,7 @@ public class SalerMainPageActivity extends Activity implements android.text.Text
         btn.setOnClickListener(new  View.OnClickListener() {
             @Override public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(SalerMainPageActivity.this, AllShopActivity.class);
+                intent.setClass(SalerMainPageActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

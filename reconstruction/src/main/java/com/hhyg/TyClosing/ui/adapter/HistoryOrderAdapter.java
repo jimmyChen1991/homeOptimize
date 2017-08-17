@@ -15,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +103,9 @@ public class HistoryOrderAdapter extends BaseAdapter {
             img.setLayoutParams(ll);
 //            ImageAware imageAware = new ImageViewAware(img, false);
 //    		ImageLoader.getInstance().displayImage(Sinfo.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
-            Picasso.with(mContext).load(Sinfo.imgUrl).into(img);
+            if(!TextUtils.isEmpty(Sinfo.imgUrl)){
+                Picasso.with(mContext).load(Sinfo.imgUrl).into(img);
+            }
             group.addView(img);
         }
         if (list.size() > 5) {

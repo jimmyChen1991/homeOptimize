@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
 import android.view.*;
@@ -1472,7 +1473,9 @@ public class OrderConformActivity extends Activity {
                     continue;
 //                ImageAware imageAware = new ImageViewAware(imgView, false);
 //        		ImageLoader.getInstance().displayImage(info.getString("goods_img"), imageAware, ImageHelper.initBarcodePathOption());
-                Picasso.with(OrderConformActivity.this).load(info.getString("goods_img")).into(imgView);
+                if(!TextUtils.isEmpty(info.getString("goods_img"))){
+                    Picasso.with(OrderConformActivity.this).load(info.getString("goods_img")).into(imgView);
+                }
                 String strT = info.getString("tax_display_txt");
                 btnCover.setVisibility(StringUtil.isEmpty(strT) == false ? View.VISIBLE : View.INVISIBLE);
                 imgView.setVisibility(View.VISIBLE);

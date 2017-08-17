@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -104,7 +105,9 @@ public class PayWeiXinActivity extends Activity implements ICheckPayResultCallBa
                         } else {
                             final ImageView image = (ImageView) findViewById(R.id.buttoncode);
 //                            ImageLoader.getInstance().displayImage(str, image);
-                            Picasso.with(PayWeiXinActivity.this).load(str).into(image);
+                            if(!TextUtils.isEmpty(str)){
+                                Picasso.with(PayWeiXinActivity.this).load(str).into(image);
+                            }
                         }
                     }
                 });
@@ -142,7 +145,7 @@ public class PayWeiXinActivity extends Activity implements ICheckPayResultCallBa
 
     public void payFailed() {
         Intent intent = new Intent();
-        intent.setClass(PayWeiXinActivity.this, AllShopActivity.class);
+        intent.setClass(PayWeiXinActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 

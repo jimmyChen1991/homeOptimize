@@ -3,6 +3,7 @@ package com.hhyg.TyClosing.ui.adapter.search;
 
 import android.graphics.Paint;
 import android.support.annotation.LayoutRes;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -73,17 +74,8 @@ public class GoodRecAdapter extends BaseQuickAdapter<SearchGoods.DataBean.GoodsL
         if(searchType == SearchType.ACTIVITY || searchType == SearchType.PRIVILEGE){
             addToshop.setVisibility(View.VISIBLE);
         }
-//        final String tag = (String) helper.getView(R.id.goodimg).getTag();
-//        final String uri = item.getImage();
-//        if(tag != null && !uri.equals(tag)){
-//            ImageView s = (ImageView)helper.getView(R.id.goodimg);
-//            s.setImageBitmap(null);
-//        }else if(tag != null){
-//            return;
-//        }
-//        helper.getView(R.id.goodimg).setTag(uri);
-//        ImageAware imageAware = new ImageViewAware((ImageView) helper.getView(R.id.goodimg), false);
-//        ImageLoader.getInstance().displayImage(item.getImage(), imageAware, ImageHelper.initBarcodePathOption());
-        Picasso.with(helper.getView(R.id.goodimg).getContext()).load(item.getImage()).into((ImageView) helper.getView(R.id.goodimg));
+        if(!TextUtils.isEmpty(item.getImage())){
+            Picasso.with(helper.getView(R.id.goodimg).getContext()).load(item.getImage()).into((ImageView) helper.getView(R.id.goodimg));
+        }
     }
 }

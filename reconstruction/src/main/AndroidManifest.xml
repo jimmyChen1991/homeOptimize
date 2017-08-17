@@ -177,6 +177,8 @@
         </activity>
         <activity android:name=".ui.HomeActivity"
                   android:screenOrientation="portrait"
+                  android:alwaysRetainTaskState="true"
+                  android:launchMode="singleTask"
                   android:theme="@style/new_atytheme">
 
         </activity>

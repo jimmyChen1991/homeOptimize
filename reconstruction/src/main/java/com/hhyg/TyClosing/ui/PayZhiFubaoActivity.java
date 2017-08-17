@@ -99,7 +99,7 @@ public class PayZhiFubaoActivity extends Activity implements ICheckPayResultCall
 
     public void payFailed() {
         Intent intent = new Intent();
-        intent.setClass(PayZhiFubaoActivity.this, AllShopActivity.class);
+        intent.setClass(PayZhiFubaoActivity.this, HomeActivity.class);
         startActivity(intent);
     }
 

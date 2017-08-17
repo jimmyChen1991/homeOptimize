@@ -41,6 +41,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -226,7 +227,9 @@ public class SpecialActivity extends Activity{
 	private void showHead(){
 		SubjectView.setText(subject);
 //		ImageLoader.getInstance().displayImage(HeadImgUri, HeadImgView,ImageHelper.initSpecialPathOption());
-		Picasso.with(SpecialActivity.this).load(HeadImgUri).into(HeadImgView);
+		if(!TextUtils.isEmpty(HeadImgUri)){
+			Picasso.with(SpecialActivity.this).load(HeadImgUri).into(HeadImgView);
+		}
 	}
 	class SpecialProc implements ProcMsgHelper{
 		@Override

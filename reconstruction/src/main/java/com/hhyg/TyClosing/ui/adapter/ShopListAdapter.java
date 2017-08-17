@@ -17,6 +17,7 @@ import com.squareup.picasso.Picasso;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -133,7 +134,9 @@ public class ShopListAdapter extends BaseAdapter {
 //    	viewHolder.shopImgView.setTag(info.imgUrl);
 //		ImageAware imageAware = new ImageViewAware(viewHolder.shopImgView, false);
 //		ImageLoader.getInstance().displayImage(info.imgUrl, imageAware, ImageHelper.initBarcodePathOption());
-        Picasso.with(convertView.getContext()).load(info.imgUrl).into(viewHolder.shopImgView);
+        if(!TextUtils.isEmpty(info.imgUrl)){
+            Picasso.with(convertView.getContext()).load(info.imgUrl).into(viewHolder.shopImgView);
+        }
         return convertView;
     }
 }

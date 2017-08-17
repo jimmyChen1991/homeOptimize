@@ -19,6 +19,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,9 @@ public class CategoryHotFragment extends Fragment{
 			viewHolder.hotCateName.setText(item.name);
 //			ImageAware imageAware = new ImageViewAware(viewHolder.hotCateImgItem, false);
 //			ImageLoader.getInstance().displayImage(item.netUri, imageAware, ImageHelper.initCatPathOption());
-			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.hotCateImgItem);
+			if(!TextUtils.isEmpty(item.netUri)){
+				Picasso.with(getActivity()).load(item.netUri).into(viewHolder.hotCateImgItem);
+			}
 		}
 		
 	}

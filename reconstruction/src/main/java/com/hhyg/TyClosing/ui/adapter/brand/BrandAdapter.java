@@ -1,5 +1,6 @@
 package com.hhyg.TyClosing.ui.adapter.brand;
 
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseSectionQuickAdapter;
@@ -35,7 +36,9 @@ public class BrandAdapter extends BaseSectionQuickAdapter<BrandSection,BaseViewH
         BrandInfo info = item.t;
         helper.setText(R.id.name_cn,info.getName_cn())
                 .setText(R.id.name_en,info.getName_en());
-        Picasso.with(helper.itemView.getContext()).load(info.getUrl()).into((ImageView) helper.getView(R.id.img));
+        if(!TextUtils.isEmpty(info.getUrl())){
+            Picasso.with(helper.itemView.getContext()).load(info.getUrl()).into((ImageView) helper.getView(R.id.img));
+        }
     }
 
     @Override

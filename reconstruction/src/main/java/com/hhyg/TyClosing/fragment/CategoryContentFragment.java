@@ -22,6 +22,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,9 @@ public class CategoryContentFragment extends Fragment{
 		mCategoryListAdapter.notifyDataSetChanged();
 //		ImageAware imageAware = new ImageViewAware(mHeadView, false);
 //		ImageLoader.getInstance().displayImage(firstLevelCateInfo.netUri, imageAware);
-		Picasso.with(getActivity()).load(fristInfo.netUri).into(mHeadView);
+		if(!TextUtils.isEmpty(fristInfo.netUri)){
+			Picasso.with(getActivity()).load(fristInfo.netUri).into(mHeadView);
+		}
 	}
 	private void findView(View root) {
 		mListView = (InSideListView) root.findViewById(R.id.catelv);
@@ -161,7 +164,9 @@ public class CategoryContentFragment extends Fragment{
 //			viewHolder.cateItemImg.setTag(uri);
 //			ImageAware imageAware = new ImageViewAware(viewHolder.cateItemImg, false);
 //			ImageLoader.getInstance().displayImage(uri, imageAware, ImageHelper.initBarcodePathOption());
-			Picasso.with(getActivity()).load(item.netUri).into(viewHolder.cateItemImg);
+			if(!TextUtils.isEmpty(item.netUri)){
+				Picasso.with(getActivity()).load(item.netUri).into(viewHolder.cateItemImg);
+			}
 		}
 	}
 

@@ -50,7 +50,7 @@ public class PayFailActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(PayFailActivity.this, AllShopActivity.class);
+                intent.setClass(PayFailActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });

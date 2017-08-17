@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import android.content.Context;
 import android.graphics.Paint;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,7 +122,9 @@ public class AutoSettleOrderAdapter extends BaseAdapter {
 //        viewHoldr.productImg.setTag(goodSku.goods_img);
 //		ImageAware imageAware = new ImageViewAware(viewHoldr.productImg, false);
 //		ImageLoader.getInstance().displayImage(goodSku.goods_img, imageAware, ImageHelper.initBarcodePathOption());
-        Picasso.with(viewHoldr.brandName.getContext()).load(goodSku.goods_img).into(viewHoldr.productImg);
+        if(!TextUtils.isEmpty(goodSku.goods_img)){
+            Picasso.with(viewHoldr.brandName.getContext()).load(goodSku.goods_img).into(viewHoldr.productImg);
+        }
         return view;
     }
 }

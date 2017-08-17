@@ -243,7 +243,7 @@ public class ContentRes {
 
             private String imgurl;
             private int sort;
-            private int specialid;
+            private String specialid;
 
             public String getImgurl() {
                 return imgurl;
@@ -261,11 +261,11 @@ public class ContentRes {
                 this.sort = sort;
             }
 
-            public int getSpecialid() {
+            public String getSpecialid() {
                 return specialid;
             }
 
-            public void setSpecialid(int specialid) {
+            public void setSpecialid(String specialid) {
                 this.specialid = specialid;
             }
         }
@@ -276,7 +276,7 @@ public class ContentRes {
             private String imgurl;
             private int sort;
             private String color;
-            private int specialid;
+            private String specialid;
             private List<GoodsBean> goods;
 
             public String getImgurl() {
@@ -303,11 +303,11 @@ public class ContentRes {
                 this.color = color;
             }
 
-            public int getSpecialid() {
+            public String getSpecialid() {
                 return specialid;
             }
 
-            public void setSpecialid(int specialid) {
+            public void setSpecialid(String specialid) {
                 this.specialid = specialid;
             }
 
@@ -368,7 +368,7 @@ public class ContentRes {
 
 
             private String imgurl;
-            private int specialid;
+            private String specialid;
 
             public String getImgurl() {
                 return imgurl;
@@ -378,11 +378,11 @@ public class ContentRes {
                 this.imgurl = imgurl;
             }
 
-            public int getSpecialid() {
+            public String getSpecialid() {
                 return specialid;
             }
 
-            public void setSpecialid(int specialid) {
+            public void setSpecialid(String specialid) {
                 this.specialid = specialid;
             }
         }

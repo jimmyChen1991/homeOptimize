@@ -99,7 +99,7 @@ public class InfoValidateActivity extends Activity implements View.OnClickListen
         if(IS_DEBUG_MODE == true) {
             String idcard[] = new String[]{"52263519890117727X"," 522635198101135012"," 522635197408242598"," 522635197306216575"," 522635198504252512",
                     " 522635197301239575"," 451025198809227698"," 451025198008241094"," 451025198602264010"," 451025197801204796"};
-            idCode.setText(idcard[4]);
+            idCode.setText(idcard[5]);
             flightNum.setText("MF5054");
             userName.setText("李飞");
             phone.setText("15010729526");

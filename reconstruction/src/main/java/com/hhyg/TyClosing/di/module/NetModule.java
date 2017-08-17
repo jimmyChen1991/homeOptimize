@@ -58,13 +58,13 @@ public class NetModule {
     @Provides
     @Named("serviceUrl")
     String provideServiceApiUrlStr(){
-        return "http://exps.mianshui365.net/";
+        return "http://wangwangexps.mianshui365.net/";
     }
 
     @Provides
     @Named("indexUrl")
     String provideIndexApiUrlStr(){
-        return "http://wangwangcommonapi.test89.mianshui365.net/";
+        return "http://wangwangcommonapi.mianshui365.net/";
     }
 
     @Provides

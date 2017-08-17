@@ -70,17 +70,17 @@ public class ShopCartActivity extends AppCompatActivity
 		setContentView(R.layout.shopcart_aty);
 		init();
 		findView();
-
 	}
 
 	private void findView() {
+		findViewById(R.id.shopcat_point).setVisibility(View.GONE);
 		ImageButton home = (ImageButton) findViewById(R.id.home);
 		home.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				UserTrackMgr.getInstance().onEvent(" tabartouch", "首页");
 				Intent it = new Intent();
-				it.setClass(ShopCartActivity.this, AllShopActivity.class);
+				it.setClass(ShopCartActivity.this, HomeActivity.class);
 				startActivity(it);
 				finish();
 			}
@@ -119,7 +119,7 @@ public class ShopCartActivity extends AppCompatActivity
 			}
 		});
 		ImageButton shopcat = (ImageButton) findViewById(R.id.shopcat);
-		shopcat.setBackgroundResource(R.drawable.allshop_shopcat_pressed);
+		shopcat.setBackgroundResource(R.drawable.shopcart_icon_pressed);
 		mBack = (ImageButton) findViewById(R.id.back);
 		mBack.setOnClickListener(this);
 		mMore = (ImageButton) findViewById(R.id.get_more);

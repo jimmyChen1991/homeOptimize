@@ -94,7 +94,7 @@ public class CaptureActivity extends Activity implements Callback ,CaptureActivi
                 mQuick = true;
                 mQuit = true;
                 Intent intent = new Intent();
-                intent.setClass(CaptureActivity.this, AllShopActivity.class);
+                intent.setClass(CaptureActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
 			}

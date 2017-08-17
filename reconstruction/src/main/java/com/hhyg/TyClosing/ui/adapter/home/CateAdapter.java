@@ -3,6 +3,7 @@ package com.hhyg.TyClosing.ui.adapter.home;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +65,9 @@ public class CateAdapter extends RecyclerView.Adapter {
             });
         }else{
             final ContentRes.DataBean.TyPadIndexNewCateBean bean = mData.get(position);
-            Picasso.with(holder.itemView.getContext()).load(bean.getImgurl()).into(viewHolder.img);
+            if(!TextUtils.isEmpty(bean.getImgurl())){
+                Picasso.with(holder.itemView.getContext()).load(bean.getImgurl()).into(viewHolder.img);
+            }
             viewHolder.cateName.setText(bean.getName());
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
