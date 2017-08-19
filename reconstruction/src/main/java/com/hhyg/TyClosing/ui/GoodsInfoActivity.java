@@ -1233,8 +1233,6 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 		@Override
 		public Object instantiateItem(View container, int position) {
 			ImageView imageView = new ImageView(GoodsInfoActivity.this);
-//			ImageAware imageAware = new ImageViewAware(imageView, false);
-//			ImageLoader.getInstance().displayImage(imgs.get(position), imageAware, ImageHelper.initBarcodePathOption());
 			if(!TextUtils.isEmpty(imgs.get(position))){
 				Picasso.with(GoodsInfoActivity.this).load(imgs.get(position)).resize(400,400).centerCrop().into(imageView);
 			}
@@ -1251,32 +1249,26 @@ public class GoodsInfoActivity extends Activity implements GoodInfoView {
 		if (sInfo == null) {
 			return;
 		}
+		mMsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); // 中间横线
+		mMsPrice.getPaint().setAntiAlias(true);// 抗锯齿
 		if(sInfo.activeInfos == null || sInfo.activeInfos.size() == 0){
-			cxPriceLayout.setVisibility(View.VISIBLE);
 			mpricefixTitle.setText("免税价：");
-			mMsTitle.setVisibility(View.INVISIBLE);
+			mMsTitle.setText("市场价: ");
 			mCxPrice.setText("¥" + sInfo.msPrice);
-			mMsPrice.setVisibility(View.INVISIBLE);
+			mMsPrice.setText("¥" + sInfo.marketPrice);
 			return;
 		}
 		final ActiveInfo aInfo = sInfo.activeInfos.get(0);
 		if(aInfo != null && aInfo.getType() == ActiveType.Cut){
-			cxPriceLayout.setVisibility(View.VISIBLE);
 			mpricefixTitle.setText("促销价：");
 			mCxPrice.setText("¥" + aInfo.getActive_price());
-			mMsTitle.setVisibility(View.VISIBLE);
-			mMsPrice.setVisibility(View.VISIBLE);
-			mMsPrice.setText(sInfo.msPrice);
-			mMsPrice.setTextColor(android.graphics.Color.GRAY);
-			mMsTitle.setTextColor(android.graphics.Color.GRAY);
-			mMsPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG); // 中间横线
-			mMsPrice.getPaint().setAntiAlias(true);// 抗锯齿
+			mMsTitle.setText("免税价: ");
+			mMsPrice.setText("¥" + sInfo.msPrice);
 		}else{
-			cxPriceLayout.setVisibility(View.VISIBLE);
 			mpricefixTitle.setText("免税价：");
-			mMsTitle.setVisibility(View.INVISIBLE);
 			mCxPrice.setText("¥" +sInfo.msPrice);
-			mMsPrice.setVisibility(View.INVISIBLE);
+			mMsTitle.setText("市场价: ");
+			mMsPrice.setText("¥" + sInfo.marketPrice);
 		}
 	}
 

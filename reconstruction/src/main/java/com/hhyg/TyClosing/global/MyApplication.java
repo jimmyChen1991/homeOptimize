@@ -1,20 +1,5 @@
 package com.hhyg.TyClosing.global;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import com.hhyg.TyClosing.di.componet.ApplicationComponent;
-import com.hhyg.TyClosing.di.componet.DaggerApplicationComponent;
-import com.hhyg.TyClosing.di.module.NetModule;
-import com.hhyg.TyClosing.info.PickUpInfo;
-import com.hhyg.TyClosing.log.CrashHandler;
-import com.hhyg.TyClosing.log.Logger;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +8,29 @@ import android.net.NetworkInfo;
 import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
+
+import com.hhyg.TyClosing.R;
+import com.hhyg.TyClosing.di.componet.ApplicationComponent;
+import com.hhyg.TyClosing.di.componet.DaggerApplicationComponent;
+import com.hhyg.TyClosing.di.module.NetModule;
+import com.hhyg.TyClosing.entities.search.HotsearchWord;
+import com.hhyg.TyClosing.info.PickUpInfo;
+import com.hhyg.TyClosing.log.CrashHandler;
+import com.hhyg.TyClosing.log.Logger;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
+import com.scwang.smartrefresh.layout.api.RefreshHeader;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -55,6 +63,17 @@ public class MyApplication extends Application implements HttpUtil {
     public final int SUC = 0x1000;
     private final int NET_TIMEOUT = 30*1000;
     private ApplicationComponent component;
+
+//    static {
+//        //设置全局的Header构建器
+//        SmartRefreshLayout.setDefaultRefreshHeaderCreater(new DefaultRefreshHeaderCreater() {
+//            @Override
+//            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+//                layout.setPrimaryColorsId(R.color.result_view, android.R.color.white);//全局设置主题颜色
+//                return new ClassicsHeader(context).setSpinnerStyle(SpinnerStyle.Translate);//指定为经典Header，默认是 贝塞尔雷达Header
+//            }
+//        });
+//    }
     public static MyApplication GetInstance() {
         return mInstance;
     }
@@ -82,8 +101,21 @@ public class MyApplication extends Application implements HttpUtil {
         return component;
     }
 
-    public void setHotSearchWord(String hotSearchWord) {
-        this.hotSearchWord = hotSearchWord;
+    public void setHotSearchWord(HotsearchWord hotsearchWord) {
+        if(hotsearchWord == null || hotsearchWord.getRecommend() == null || hotsearchWord.getRecommend().size() == 0){
+            this.hotSearchWord = null;
+        }else{
+            StringBuilder sb = new StringBuilder();
+            int size = hotsearchWord.getRecommend().size();
+            for (int index = 0 ; index < size ; index ++){
+                HotsearchWord.RecommendBean bean  = hotsearchWord.getRecommend().get(index);
+                sb.append(bean.getHotword());
+                if(index != size -1){
+                    sb.append(" | ");
+                }
+            }
+            this.hotSearchWord = sb.toString();
+        }
     }
 
     public String getHotSearchWord() {

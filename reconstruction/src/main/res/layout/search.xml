@@ -43,7 +43,7 @@
             android:focusable="true"
 			android:maxLines="1"
 			android:inputType="text"
-            android:hint="搜索商品" />
+            android:hint="@string/search_indictor" />
         </LinearLayout>
         <ImageButton
             android:id="@+id/searchcommmit"

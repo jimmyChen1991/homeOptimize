@@ -167,6 +167,8 @@
                 android:layout_height="45dp"
                 android:layout_marginLeft="@dimen/dp_5"
                 android:hint="请输入工号~"
+                android:maxLines="1"
+                android:inputType="text"
                 android:textColor="#333333"
                 android:textColorHint="#999999"/>
             <Button

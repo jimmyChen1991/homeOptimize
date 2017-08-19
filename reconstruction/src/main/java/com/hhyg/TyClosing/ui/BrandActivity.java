@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,13 +20,16 @@ import com.gjiazhe.wavesidebar.WaveSideBar;
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.apiService.BrandSevice;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
 import com.hhyg.TyClosing.di.componet.DaggerBrandComponent;
 import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
 import com.hhyg.TyClosing.di.module.CommonNetParamModule;
+import com.hhyg.TyClosing.entities.CommonParam;
 import com.hhyg.TyClosing.entities.brand.BrandInfo;
 import com.hhyg.TyClosing.entities.brand.BrandSection;
 import com.hhyg.TyClosing.entities.brand.ReqParam;
 import com.hhyg.TyClosing.entities.brand.Res;
+import com.hhyg.TyClosing.entities.search.HotsearchWord;
 import com.hhyg.TyClosing.entities.search.SearchGoodsParam;
 import com.hhyg.TyClosing.entities.search.SearchType;
 import com.hhyg.TyClosing.global.MyApplication;
@@ -35,7 +40,6 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.transform.Source;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -87,6 +91,12 @@ public class BrandActivity extends AppCompatActivity {
     TextView hotWord;
     @BindView(R.id.shopcat_point)
     TextView shopcartNum;
+    @BindView(R.id.bar_start)
+    TextView searchStart;
+    @Inject
+    HotsearchWordSevice wordSevice;
+    @Inject
+    CommonParam commonParam;
     private BrandAdapter mAdapter;
 
     @Override
@@ -100,9 +110,15 @@ public class BrandActivity extends AppCompatActivity {
                 .build()
                 .inject(this);
         hhygIcon.setBackgroundResource(R.drawable.back);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) hhygIcon.getLayoutParams();
+        layoutParams.setMargins(20,0,0,0);
+        hhygIcon.setLayoutParams(layoutParams);
         brand.setBackgroundResource(R.drawable.brand_icon_pressed);
-        if(MyApplication.GetInstance().getHotSearchWord() != null){
+        if(!TextUtils.isEmpty(MyApplication.GetInstance().getHotSearchWord())){
+            searchStart.setText(getString(R.string.everyone_search));
             hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+        }else {
+            getHotWord();
         }
         Observable.just(reqParam)
                 .flatMap(new Function<ReqParam, ObservableSource<Res>>() {
@@ -116,6 +132,7 @@ public class BrandActivity extends AppCompatActivity {
                 .subscribe(new Observer<Res>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
+                        Log.d(TAG, "content");
                         disposable.add(d);
                     }
 
@@ -137,7 +154,46 @@ public class BrandActivity extends AppCompatActivity {
 
                     }
                 });
+    }
 
+    private void getHotWord() {
+        Observable.just(commonParam)
+                .flatMap(new Function<CommonParam, ObservableSource<HotsearchWord>>() {
+                    @Override
+                    public ObservableSource<HotsearchWord> apply(@NonNull CommonParam param) throws Exception {
+                        return wordSevice.getRecommend(gson.toJson(param));
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HotsearchWord>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+                        Log.d(TAG, "word");
+                        disposable.add(d);
+                    }
+
+                    @Override
+                    public void onNext(@NonNull HotsearchWord hotsearchWord) {
+                        if(hotsearchWord.getRecommend() != null && hotsearchWord.getRecommend().size() != 0){
+                            MyApplication.GetInstance().setHotSearchWord(hotsearchWord);
+                            searchStart.setText(getString(R.string.everyone_search));
+                            hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+                        }else{
+                            searchStart.setText(getString(R.string.search_indictor));
+                        }
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        searchStart.setText(getString(R.string.search_indictor));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     private void initSideBar(final Res res){
@@ -153,6 +209,7 @@ public class BrandActivity extends AppCompatActivity {
         if(sArray.length > 1){
             sideBar.setIndexItems(sArray);
         }
+        sideBar.setVisibility(View.VISIBLE);
         sideBar.setOnSelectIndexItemListener(new WaveSideBar.OnSelectIndexItemListener() {
             @Override
             public void onSelectIndexItem(String index) {

@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -236,6 +237,11 @@ public class SearchGoodActivity extends AppCompatActivity {
                 .build()
                 .inject(this);
         initView();
+        if(!TextUtils.isEmpty(MyApplication.GetInstance().getHotSearchWord())){
+            searchbar.setText(MyApplication.GetInstance().getHotSearchWord());
+        }else{
+            searchbar.setText(getString(R.string.search_indictor));
+        }
         param_filter.getData().setAvailable(null); //获取筛选条件，有货没货不传
         Observable.just(param)
                 .flatMap(new Function<SearchGoodsParam, ObservableSource<SearchGoods>>() {
@@ -1289,7 +1295,7 @@ public class SearchGoodActivity extends AppCompatActivity {
             spu.stock = bean.getStock();
             spu.citAmount = 1000;
             spu.attrInfo = bean.getName();
-            spu.msPrice = bean.getMianshui_price();
+            spu.msPrice = bean.getPrice();
             if (bean.getImage() != null && !bean.getImage().equals("")) {
                 ArrayList<String> imgLinks = new ArrayList<>();
                 imgLinks.add(bean.getImage());

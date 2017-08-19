@@ -8,6 +8,7 @@ import com.afollestad.materialdialogs.Theme;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
 import com.hhyg.TyClosing.entities.search.FilterChangedRaw;
 import com.hhyg.TyClosing.entities.search.PeopertyOfCate;
 import com.hhyg.TyClosing.entities.search.SearchFilterRes;
@@ -182,5 +183,10 @@ public class SearchGoodsModule {
         FilterChangedRaw raw = new FilterChangedRaw();
         raw.setAvailable("1");
         return raw;
+    }
+
+    @Provides
+    HotsearchWordSevice provideHotsearchSevice(@Named("slowIndexApi") Retrofit retrofit){
+        return retrofit.create(HotsearchWordSevice.class);
     }
 }

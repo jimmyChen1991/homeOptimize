@@ -228,6 +228,7 @@
                     android:id="@+id/activetitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="18"
                     android:text="促销:"
                     android:textColor="#333333"

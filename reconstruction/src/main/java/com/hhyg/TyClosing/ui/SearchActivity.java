@@ -125,6 +125,9 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search);
 		findView();
+		if(!TextUtils.isEmpty(MyApplication.GetInstance().getHotSearchWord())){
+			mEditText.setHint(MyApplication.GetInstance().getHotSearchWord());
+		}
 		DaggerAssociateComponent.builder()
 				.applicationComponent(MyApplication.GetInstance().getComponent())
 				.commonNetParamComponent(DaggerCommonNetParamComponent.builder().commonNetParamModule(new CommonNetParamModule()).build())
@@ -278,26 +281,31 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 						onlyBlank = false;
 					}
 				}
-				if(onlyBlank){
+				if(onlyBlank && MyApplication.GetInstance().getHotSearchWord() == null){
 					mEditText.clearComposingText();
 					return;
 				}
-				jumpToSearchGoodActivity(searchWord);
-			}
-		});
-		mEditText.setOnCommitBtnListener(new OnCommitBtnListener(){
-			@Override
-			public void OnCanCommit() {
-				searchCommmitBtn.setBackgroundResource(R.drawable.searchcommit_selector);
-				searchCommmitBtn.setClickable(true);
-			}
-			@Override
-			public void OnCantCommit() {
-				searchCommmitBtn.setBackgroundResource(R.drawable.search_pressed);
-				searchCommmitBtn.setClickable(false);
-			}
+				if(TextUtils.isEmpty(searchWord) && MyApplication.GetInstance().getHotSearchWord()!= null){
+					jumpToSearchGoodActivity(MyApplication.GetInstance().getHotSearchWord());
+				}else{
+					jumpToSearchGoodActivity(searchWord);
+				}
 
+			}
 		});
+//		mEditText.setOnCommitBtnListener(new OnCommitBtnListener(){
+//			@Override
+//			public void OnCanCommit() {
+//				searchCommmitBtn.setBackgroundResource(R.drawable.searchcommit_selector);
+//				searchCommmitBtn.setClickable(true);
+//			}
+//			@Override
+//			public void OnCantCommit() {
+//				searchCommmitBtn.setBackgroundResource(R.drawable.search_pressed);
+//				searchCommmitBtn.setClickable(false);
+//			}
+//
+//		});
 		deleteHistory.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -424,7 +432,6 @@ public class SearchActivity extends BaseActivity implements View.OnClickListener
 		}
 		@Override
 		protected void bindDataToItemView(ViewHolder viewHolder, SpecialInfo item) {
-//			ImageLoader.getInstance().displayImage(item.netUri, viewHolder.ImageItem, ImageHelper.initSpecialPathOption());
 			if(!TextUtils.isEmpty(item.netUri)){
 				Picasso.with(SearchActivity.this).load(item.netUri).into(viewHolder.ImageItem);
 			}

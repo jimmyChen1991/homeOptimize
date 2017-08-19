@@ -54,19 +54,23 @@ public class GoodRecAdapter extends BaseQuickAdapter<SearchGoods.DataBean.GoodsL
         TextView activePrice = helper.getView(R.id.acviteprice);
         if(aInfo.getType() == ActiveInfo.ActiveType.Normal || aInfo.getType() == ActiveInfo.ActiveType.NoStock){
             indicator.setVisibility(View.INVISIBLE);
-            citPrice.setVisibility(View.GONE);
             activePrice.setText(Constants.PRICE_TITLE + item.getPrice());
+            citPrice.setText(Constants.PRICE_TITLE + item.getMarket_price());
+            citPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            citPrice.getPaint().setAntiAlias(true);
         }else if(aInfo.getType() == ActiveInfo.ActiveType.Cut){
             indicator.setVisibility(View.VISIBLE);
             indicator.setText(item.getActive_detail());
-            activePrice.setText(Constants.PRICE_TITLE + item.getPrice());
+            activePrice.setText(Constants.PRICE_TITLE + item.getActive_price());
             citPrice.setVisibility(View.VISIBLE);
-            citPrice.setText(Constants.PRICE_TITLE + item.getMianshui_price());
+            citPrice.setText(Constants.PRICE_TITLE + item.getPrice());
             citPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             citPrice.getPaint().setAntiAlias(true);
         }else{
             activePrice.setText(Constants.PRICE_TITLE+item.getPrice());
-            citPrice.setVisibility(View.GONE);
+            citPrice.setText(Constants.PRICE_TITLE + item.getMarket_price());
+            citPrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+            citPrice.getPaint().setAntiAlias(true);
             indicator.setVisibility(View.VISIBLE);
             indicator.setText(item.getActive_detail());
         }

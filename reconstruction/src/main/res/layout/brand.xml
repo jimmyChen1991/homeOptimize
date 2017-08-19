@@ -21,9 +21,10 @@
         android:id="@+id/side_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingRight="8dp"
+        android:paddingRight="10dp"
         android:paddingLeft="8dp"
-        app:sidebar_max_offset="20dp"
+        android:visibility="gone"
+        app:sidebar_max_offset="15dp"
         app:sidebar_text_size="@dimen/sp_18"
         app:sidebar_text_color="@color/normal"/>
     <include

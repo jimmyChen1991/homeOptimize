@@ -20,6 +20,15 @@
             android:layout_height="wrap_content"
             android:src="@drawable/allshop_nostock"
             android:layout_centerInParent="true"  />
+        <TextView
+            android:id="@+id/activite_indicator_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/active_indicator"
+            android:layout_alignParentBottom="true"
+            android:maxLines="1"
+            android:maxWidth="150dp"
+            />
     </RelativeLayout>
     <TextView
         android:id="@+id/brandname"
@@ -37,7 +46,7 @@
         android:layout_below="@+id/brandname"
         android:layout_centerHorizontal="true"
         android:maxLines="1"
-        android:maxEms="12"
+        android:maxEms="16"
         android:ellipsize="end"
         android:textColor="#333333"
         android:textSize="12sp"
@@ -54,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
-            android:textColor="#C38C56"
+            android:textColor="@color/cheap_price"
             android:textSize="18sp"
             android:textStyle="bold"
             android:background="#ffffff" />
@@ -67,23 +76,10 @@
             android:textColor="#999999"
             android:textSize="18sp" />
     </RelativeLayout>
-    <TextView
-        android:id="@+id/activite_indicator_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/active_indicator"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="10dip"
-        android:layout_marginTop="10dip"
-        android:maxLines="1"
-        android:maxWidth="150dp"
-        />
     <ImageView
         android:id="@+id/privilege_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/activite_indicator_text"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"

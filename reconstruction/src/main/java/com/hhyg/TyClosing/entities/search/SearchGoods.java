@@ -196,7 +196,7 @@ public class SearchGoods {
             private String name;
             private String brand_name;
             private String price;
-            private String mianshui_price;
+            private String active_price;
             private String market_price;
             private String image;
             private int stock;
@@ -204,6 +204,14 @@ public class SearchGoods {
             private String active_type;
             private String active_code;
             private boolean is_privileged;
+
+            public void setActive_price(String active_price) {
+                this.active_price = active_price;
+            }
+
+            public String getActive_price() {
+                return active_price;
+            }
 
             public String getBarcode() {
                 return barcode;
@@ -235,14 +243,6 @@ public class SearchGoods {
 
             public void setPrice(String price) {
                 this.price = price;
-            }
-
-            public String getMianshui_price() {
-                return mianshui_price;
-            }
-
-            public void setMianshui_price(String mianshui_price) {
-                this.mianshui_price = mianshui_price;
             }
 
             public String getMarket_price() {

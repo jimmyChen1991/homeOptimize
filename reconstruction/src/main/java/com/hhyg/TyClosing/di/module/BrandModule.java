@@ -2,6 +2,7 @@ package com.hhyg.TyClosing.di.module;
 
 import com.google.gson.Gson;
 import com.hhyg.TyClosing.apiService.BrandSevice;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
 import com.hhyg.TyClosing.entities.CommonParam;
 import com.hhyg.TyClosing.entities.brand.ReqParam;
 
@@ -48,5 +49,10 @@ public class BrandModule {
     @Provides
     CompositeDisposable provideDisposable(){
         return new CompositeDisposable();
+    }
+
+    @Provides
+    HotsearchWordSevice provideHotsearchSevice(@Named("slowIndexApi") Retrofit retrofit){
+        return retrofit.create(HotsearchWordSevice.class);
     }
 }

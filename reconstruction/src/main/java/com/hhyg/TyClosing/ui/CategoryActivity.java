@@ -2,8 +2,16 @@ package com.hhyg.TyClosing.ui;
 
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.allShop.info.CateInfo;
+import com.hhyg.TyClosing.apiService.HotsearchWordSevice;
+import com.hhyg.TyClosing.di.componet.DaggerBrandComponent;
+import com.hhyg.TyClosing.di.componet.DaggerCategoryComponent;
+import com.hhyg.TyClosing.di.componet.DaggerCommonNetParamComponent;
+import com.hhyg.TyClosing.di.module.CommonNetParamModule;
+import com.hhyg.TyClosing.entities.CommonParam;
+import com.hhyg.TyClosing.entities.search.HotsearchWord;
 import com.hhyg.TyClosing.fragment.CategoryContentFragment;
 import com.hhyg.TyClosing.fragment.CategoryHotFragment;
 import com.hhyg.TyClosing.global.MyApplication;
@@ -24,6 +32,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +40,23 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class CategoryActivity extends Activity implements CategoryView{
 	private ListView mListView;
@@ -52,22 +72,78 @@ public class CategoryActivity extends Activity implements CategoryView{
 	ImageButton cate;
 	@BindView(R.id.hotsearch_content)
 	TextView hotWord;
+	@BindView(R.id.bar_start)
+	TextView searchStart;
 	@BindView(R.id.shopcat_point)
 	TextView shopcartNum;
+	@Inject
+	HotsearchWordSevice wordSevice;
+	@Inject
+	CommonParam commonParam;
+	@Inject
+	Gson gson;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.category);
 		ButterKnife.bind(this);
+		DaggerCategoryComponent.builder()
+				.applicationComponent(MyApplication.GetInstance().getComponent())
+				.commonNetParamComponent(DaggerCommonNetParamComponent.builder().commonNetParamModule(new CommonNetParamModule()).build())
+				.build()
+				.inject(this);
 		findView();
 		init();
-		if(MyApplication.GetInstance().getHotSearchWord() != null){
+		if(!TextUtils.isEmpty(MyApplication.GetInstance().getHotSearchWord())){
 			hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+			searchStart.setText(getString(R.string.everyone_search));
+		}else {
+			getHotWord();
 		}
 		mCategotyPresenter.attach(this);
 		mCategotyPresenter.fetchLastedCategotyDate();
 		Logger.GetInstance().Track("CategoryActivity on Create");
 	}
+
+	private void getHotWord() {
+		Observable.just(commonParam)
+				.flatMap(new Function<CommonParam, ObservableSource<HotsearchWord>>() {
+					@Override
+					public ObservableSource<HotsearchWord> apply(@NonNull CommonParam param) throws Exception {
+						return wordSevice.getRecommend(gson.toJson(param));
+					}
+				})
+				.observeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe(new Observer<HotsearchWord>() {
+					@Override
+					public void onSubscribe(@NonNull Disposable d) {
+
+					}
+
+					@Override
+					public void onNext(@NonNull HotsearchWord hotsearchWord) {
+						if(hotsearchWord.getRecommend() != null && hotsearchWord.getRecommend().size() != 0){
+							MyApplication.GetInstance().setHotSearchWord(hotsearchWord);
+							searchStart.setText(getString(R.string.everyone_search));
+							hotWord.setText(MyApplication.GetInstance().getHotSearchWord());
+						}else{
+							searchStart.setText(getString(R.string.search_indictor));
+						}
+					}
+
+					@Override
+					public void onError(@NonNull Throwable e) {
+						searchStart.setText(getString(R.string.search_indictor));
+					}
+
+					@Override
+					public void onComplete() {
+
+					}
+				});
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -102,6 +178,9 @@ public class CategoryActivity extends Activity implements CategoryView{
 		mProgressBar = new SimpleProgressBar((ImageView) findViewById(R.id.infoOperating));
 		mListView = (ListView) findViewById(R.id.title_list);
 		hhygIcon.setBackgroundResource(R.drawable.back);
+		LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) hhygIcon.getLayoutParams();
+		layoutParams.setMargins(20,0,0,0);
+		hhygIcon.setLayoutParams(layoutParams);
 		cate.setBackgroundResource(R.drawable.cate_icon_pressed);
 
 	}

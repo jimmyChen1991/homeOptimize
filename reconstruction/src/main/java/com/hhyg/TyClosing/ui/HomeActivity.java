@@ -44,6 +44,9 @@ import com.hhyg.TyClosing.ui.adapter.home.BrandBannerAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.CateAdapter;
 import com.hhyg.TyClosing.ui.adapter.home.GoodsAdapter;
 import com.hhyg.TyClosing.ui.view.SPScrollview;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -93,7 +96,7 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.rv)
     SPScrollview scrollview;
     @BindView(R.id.swipe_container)
-    SwipeRefreshLayout swipeContainer;
+    SmartRefreshLayout swipeContainer;
     @BindView(R.id.searchbar_top)
     View topSearchBar;
     @BindView(R.id.hhyg_icon)
@@ -107,6 +110,9 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.hotsearch_content)
     TextView topbarHotSearchWord;
     TextView searchWord;
+    @BindView(R.id.bar_start)
+    TextView searchStart;
+    TextView searchStartHead;
     @BindView(R.id.shopcat_point)
     TextView shopcartNum;
     Banner mBanner;
@@ -117,10 +123,9 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         home.setBackgroundResource(R.drawable.home_icon_pressed);
         topSearchBar.setVisibility(View.GONE);
-        swipeContainer.setProgressViewEndTarget(true,200);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContainer.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void onRefresh(RefreshLayout refreshlayout) {
                 fillScrollData();
             }
         });
@@ -154,22 +159,26 @@ public class HomeActivity extends AppCompatActivity {
                 .doOnNext(new Consumer<ContentRes>() {
                     @Override
                     public void accept(@NonNull ContentRes contentRes) throws Exception {
-                        if (contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null) {
+                        if (contentRes.getData().getTy_pad_index_new_xianshitehui() != null && contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null) {
                             for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()) {
                                 handlerGoodsBeanPrice(bean);
                             }
                         }
-                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
-                            if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
-                                for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
-                                    handlerGoodsBeanPrice(bean);
+                        if(contentRes.getData().getTy_pad_index_new_goodstopic() != null){
+                            for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
+                                if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
+                                    for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
+                                        handlerGoodsBeanPrice(bean);
+                                    }
                                 }
                             }
                         }
-                        for (ContentRes.DataBean.TyPadIndexNewRecommendgoodBean recommendgoodBean : contentRes.getData().getTy_pad_index_new_recommendgood()) {
-                            if (recommendgoodBean.getGoods() != null) {
-                                for (GoodsBean bean : recommendgoodBean.getGoods()) {
-                                    handlerGoodsBeanPrice(bean);
+                        if(contentRes.getData().getTy_pad_index_new_recommendgood() != null){
+                            for (ContentRes.DataBean.TyPadIndexNewRecommendgoodBean recommendgoodBean : contentRes.getData().getTy_pad_index_new_recommendgood()) {
+                                if (recommendgoodBean.getGoods() != null) {
+                                    for (GoodsBean bean : recommendgoodBean.getGoods()) {
+                                        handlerGoodsBeanPrice(bean);
+                                    }
                                 }
                             }
                         }
@@ -178,7 +187,7 @@ public class HomeActivity extends AppCompatActivity {
                 .doOnNext(new Consumer<ContentRes>() {
                     @Override
                     public void accept(@NonNull ContentRes contentRes) throws Exception {
-                        if (contentRes.getData().getTy_pad_index_new_xianshitehui().getColor() != null) {
+                        if (contentRes.getData().getTy_pad_index_new_xianshitehui() != null && contentRes.getData().getTy_pad_index_new_xianshitehui().getColor() != null) {
                             String color = contentRes.getData().getTy_pad_index_new_xianshitehui().getColor();
                             if (contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods() != null) {
                                 for (GoodsBean bean : contentRes.getData().getTy_pad_index_new_xianshitehui().getGoods()) {
@@ -188,15 +197,16 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                             }
                         }
-
-                        for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
-                            if (tyPadIndexNewGoodstopicBean.getColor() != null) {
-                                String color = tyPadIndexNewGoodstopicBean.getColor();
-                                if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
-                                    for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
-                                        String html = "<font color='" + color + "'>" + bean.getCheapPrice() + "</font>";
-                                        bean.setCheapPrice(html);
-                                        bean.setSetColor(true);
+                        if(contentRes.getData().getTy_pad_index_new_goodstopic() != null){
+                            for (ContentRes.DataBean.TyPadIndexNewGoodstopicBean tyPadIndexNewGoodstopicBean : contentRes.getData().getTy_pad_index_new_goodstopic()) {
+                                if (tyPadIndexNewGoodstopicBean.getColor() != null) {
+                                    String color = tyPadIndexNewGoodstopicBean.getColor();
+                                    if (tyPadIndexNewGoodstopicBean.getGoods() != null) {
+                                        for (GoodsBean bean : tyPadIndexNewGoodstopicBean.getGoods()) {
+                                            String html = "<font color='" + color + "'>" + bean.getCheapPrice() + "</font>";
+                                            bean.setCheapPrice(html);
+                                            bean.setSetColor(true);
+                                        }
                                     }
                                 }
                             }
@@ -209,7 +219,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void run() throws Exception {
                         if(swipeContainer.isRefreshing()){
-                            swipeContainer.setRefreshing(false);
+                            swipeContainer.finishRefresh();
                         }
                     }
                 })
@@ -255,33 +265,30 @@ public class HomeActivity extends AppCompatActivity {
                 .subscribe(new Observer<HotsearchWord>() {
                     @Override
                     public void onSubscribe(@NonNull Disposable d) {
-
+                        disposable.add(d);
                     }
 
                     @Override
                     public void onNext(@NonNull HotsearchWord hotsearchWord) {
-                        StringBuilder sb = new StringBuilder();
-                        if(hotsearchWord.getRecommend() == null){
+                        if(hotsearchWord.getRecommend() == null || hotsearchWord.getRecommend().size() == 0){
+                            searchStart.setText(getString(R.string.search_indictor));
+                            searchStartHead.setText(getString(R.string.search_indictor));
+                            searchWord.setText(null);
+                            topbarHotSearchWord.setText(null);
+                            MyApplication.GetInstance().setHotSearchWord(null);
                             return;
                         }
-                        int size = hotsearchWord.getRecommend().size();
-                        for (int index = 0 ; index < size ; index ++){
-                            HotsearchWord.RecommendBean bean  = hotsearchWord.getRecommend().get(index);
-                            sb.append(bean.getHotword());
-                            if(index != size -1){
-                                sb.append(" | ");
-                            }
-                        }
-                        searchWord.setText(sb.toString());
-                        topbarHotSearchWord.setText(sb.toString());
-                        MyApplication.GetInstance().setHotSearchWord(sb.toString());
-                        Log.d(TAG, "hotsearchword_next");
+                        MyApplication.GetInstance().setHotSearchWord(hotsearchWord);
+                        searchStart.setText(getString(R.string.everyone_search));
+                        searchStartHead.setText(getString(R.string.everyone_search));
+                        searchWord.setText(MyApplication.GetInstance().getHotSearchWord());
+                        topbarHotSearchWord.setText(MyApplication.GetInstance().getHotSearchWord());
 
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
-
+                        searchStart.setText(getString(R.string.search_indictor));
                     }
 
                     @Override
@@ -305,6 +312,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initView(final ContentRes contentRes) {
         View headView = LayoutInflater.from(this).inflate(R.layout.home_head, null);
         searchWord = (TextView) headView.findViewById(R.id.hotsearch_word);
+        searchStartHead = (TextView) headView.findViewById(R.id.bar_start);
         //处理Banner
         mBanner = (Banner) headView.findViewById(R.id.banner);
         mBanner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);

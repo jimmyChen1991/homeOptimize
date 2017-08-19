@@ -109,6 +109,7 @@ public class GoodInfoPresenter extends BasePresenter<GoodInfoView>{
 						sInfo.fullReduce = obj.getString("full_reduce");
 						sInfo.shelveStatus = obj.getIntValue("shelve_status");
 						sInfo.description = obj.getString("description");
+						sInfo.marketPrice = obj.getString("market_price");
 						ArrayList<String> imageLinks = new ArrayList<String>();
 						JSONArray imageArray = obj.getJSONArray("other_images");
 						for(int index = 0;index < imageArray.size();index++){

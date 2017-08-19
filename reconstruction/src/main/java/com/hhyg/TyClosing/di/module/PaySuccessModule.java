@@ -19,7 +19,7 @@ import retrofit2.Retrofit;
 public class PaySuccessModule {
 
     @Provides
-    BindSaler2oderSevice provideSevice(@Named("slowIndexApi")Retrofit retrofit){
+    BindSaler2oderSevice provideSevice(@Named("fastIndexApi")Retrofit retrofit){
         return retrofit.create(BindSaler2oderSevice.class);
     }
 

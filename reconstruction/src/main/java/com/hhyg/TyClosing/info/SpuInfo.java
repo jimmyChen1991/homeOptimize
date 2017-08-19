@@ -13,6 +13,7 @@ public class SpuInfo {
 		public double activePrice;
 		public double activeCut;
 		public String msPrice;
+		public String marketPrice;
 		public String full;
 		public String fullReduce;
 		public String barCode;
