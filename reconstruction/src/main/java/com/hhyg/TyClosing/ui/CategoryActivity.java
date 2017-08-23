@@ -123,7 +123,7 @@ public class CategoryActivity extends Activity implements CategoryView{
 
 					@Override
 					public void onNext(@NonNull HotsearchWord hotsearchWord) {
-						if(hotsearchWord.getRecommend() != null && hotsearchWord.getRecommend().size() != 0){
+						if(hotsearchWord != null || hotsearchWord.getRecommend() != null && hotsearchWord.getRecommend().size() != 0){
 							MyApplication.GetInstance().setHotSearchWord(hotsearchWord);
 							searchStart.setText(getString(R.string.everyone_search));
 							hotWord.setText(MyApplication.GetInstance().getHotSearchWord());

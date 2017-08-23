@@ -98,7 +98,7 @@ public class ProgressDialogUtil {
 
     }
 
-    public static Dialog dlg = null;
+    private static Dialog dlg = null;
     public static void show(Context context) {
         hide();
         dlg = show(context, context.getString(R.string.alert_loading_msg), false);

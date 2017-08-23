@@ -270,7 +270,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(@NonNull HotsearchWord hotsearchWord) {
-                        if(hotsearchWord.getRecommend() == null || hotsearchWord.getRecommend().size() == 0){
+                        if(hotsearchWord == null || hotsearchWord.getRecommend() == null || hotsearchWord.getRecommend().size() == 0){
                             searchStart.setText(getString(R.string.search_indictor));
                             searchStartHead.setText(getString(R.string.search_indictor));
                             searchWord.setText(null);

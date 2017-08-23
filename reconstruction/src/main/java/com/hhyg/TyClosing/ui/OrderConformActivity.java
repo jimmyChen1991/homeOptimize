@@ -2,24 +2,40 @@ package com.hhyg.TyClosing.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
 import android.util.Log;
-import android.view.*;
-import android.widget.*;
+import android.view.Gravity;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhyg.TyClosing.R;
 import com.hhyg.TyClosing.config.Constants;
-import com.hhyg.TyClosing.global.*;
+import com.hhyg.TyClosing.global.INetWorkCallBack;
+import com.hhyg.TyClosing.global.JsonPostParamBuilder;
+import com.hhyg.TyClosing.global.MyApplication;
+import com.hhyg.TyClosing.global.NetExceptionAlert;
 import com.hhyg.TyClosing.info.PickUpInfo;
 import com.hhyg.TyClosing.log.Logger;
 import com.hhyg.TyClosing.mgr.ClosingRefInfoMgr;
@@ -29,15 +45,17 @@ import com.hhyg.TyClosing.ui.dialog.CustomAlertDialog;
 import com.hhyg.TyClosing.ui.dialog.CustomConfirmDialog;
 import com.hhyg.TyClosing.util.ProgressDialogUtil;
 import com.hhyg.TyClosing.util.StringUtil;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.imageaware.ImageAware;
-import com.nostra13.universalimageloader.core.imageaware.ImageViewAware;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.hhyg.TyClosing.config.Constants.IS_DEBUG_MODE;
 
@@ -1353,7 +1371,7 @@ public class OrderConformActivity extends Activity {
         }
     }
 
-    public void setHolderViewByStatus(String strStatus, OrderConformActivity.ViewHolder holder) {
+    private void setHolderViewByStatus(String strStatus, OrderConformActivity.ViewHolder holder) {
         holder.info.setTextColor(android.graphics.Color.parseColor("#676767"));
         holder.title.setTextColor(android.graphics.Color.parseColor("#c18d56"));
         holder.viewImage.setImageResource(INUSE.equals(strStatus) ? R.drawable.select_1 : R.drawable.select_2);
@@ -1635,10 +1653,6 @@ public class OrderConformActivity extends Activity {
             }
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public String getData() {
-        return getIntent().getStringExtra("data");
     }
 
     public JSONArray getObGoods() {
